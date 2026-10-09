@@ -52,7 +52,10 @@ function doPost(e) {
       if (f === 'areas') return JSON.stringify(cleanAreas_(data.areas));
       return safe_(data[f]);
     });
-    sheet.appendRow(row);
+    // Grava como texto puro para o Sheets não converter "03/2023" ou "2019" em data/número.
+    const range = sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length);
+    range.offset(0, 1, 1, row.length - 1).setNumberFormat('@');
+    range.setValues([row]);
     return json_({ ok: true, fotoId: fotoId });
   } catch (err) {
     return json_({ ok: false, error: String(err.message || err) });
@@ -64,12 +67,17 @@ function doPost(e) {
 // Devolve a resposta mais recente de cada integrante.
 function doGet() {
   try {
-    const values = getSheet_().getDataRange().getValues();
+    const dataRange = getSheet_().getDataRange();
+    const values = dataRange.getValues();
+    const shown = dataRange.getDisplayValues(); // texto como aparece na planilha
     const header = values.shift();
+    shown.shift();
     const latest = {};
-    values.forEach(function (r) {
+    values.forEach(function (r, ri) {
       const o = {};
-      header.forEach(function (h, i) { o[h] = r[i] instanceof Date ? r[i].toISOString() : r[i]; });
+      header.forEach(function (h, i) {
+        o[h] = h === 'timestamp' && Object.prototype.toString.call(r[i]) === '[object Date]' ? r[i].toISOString() : shown[ri][i];
+      });
       if (o.nome) latest[o.nome] = o; // linhas mais novas sobrescrevem as antigas
     });
     const membros = Object.keys(latest).map(function (k) {
