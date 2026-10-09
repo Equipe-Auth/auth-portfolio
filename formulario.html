@@ -190,10 +190,6 @@
   </section>
 
   <section style="display:flex;flex-direction:column;gap:20px;padding:28px 0 0;border-top:1px solid var(--linha)">
-    <div data-f="aceite" class="field">
-      <label class="check"><input type="checkbox" name="aceite"><span>Declaro que as informações acima são verdadeiras e autorizo seu uso no portfólio da equipe AUTH.</span></label>
-      <span class="err"></span>
-    </div>
     <div id="sendErr" class="alert bad" hidden><span class="i">!</span><div id="sendErrMsg"></div></div>
     <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
       <button type="submit" class="btn" id="submitBtn" style="flex:1 1 220px;max-width:320px;min-height:52px">Enviar para o portfólio</button>
@@ -327,7 +323,6 @@
     if (!v('exemplo')) e.exemplo = 'Dê um exemplo da competência escolhida.';
     const caso = ['caso_titulo', 'caso_empresa', 'caso_ano', 'caso_contexto', 'caso_desafio', 'caso_acao', 'caso_resultado'];
     if (caso.some(v)) ['caso_contexto', 'caso_acao', 'caso_resultado'].forEach(k => { if (!v(k)) e[k] = 'Para o caso entrar no portfólio, preencha este campo.'; });
-    if (!form.elements.aceite.checked) e.aceite = 'Confirme que as informações são verdadeiras.';
     return e;
   }
 
