@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulário AUTH</title>
+<meta name="description" content="Preencha seu perfil para o portfólio da Equipe AUTH">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D2026'/%3E%3Crect x='19' y='19' width='7' height='7' fill='%232F7A5F'/%3E%3C/svg%3E">
+<script src="config.js"></script>
+<script src="assets/auth.js"></script>
+<style>
+  .f-head { padding: 28px var(--gutter) 32px; background: #fff; border-bottom: 1px solid var(--linha); }
+  .f-head h1 { margin: 28px 0 10px; font: 700 32px/1.15 var(--display); letter-spacing: -0.02em; text-wrap: balance; max-width: 720px; }
+  .f-head p { margin: 0; max-width: 640px; color: var(--texto-2); text-wrap: pretty; }
+  main { padding: 8px var(--gutter) 56px; max-width: 1080px; margin: 0 auto; }
+  .fsec { display: flex; flex-wrap: wrap; gap: 16px 48px; padding: 32px 0; border-top: 1px solid var(--linha); }
+  .fsec:first-of-type { border-top: 0; }
+  .fsec-side { flex: 1 1 200px; max-width: 260px; }
+  .fsec-side .k { font: 700 13px var(--display); color: var(--verde); }
+  .fsec-side h2 { margin: 4px 0 6px; font: 700 20px/1.25 var(--display); }
+  .fsec-side p { margin: 0; font-size: 14px; color: var(--muted); }
+  .fsec-body { flex: 999 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .lbl { font-size: 14px; font-weight: 700; }
+  .req { color: var(--terracota); }
+  .hint { font-size: 13px; color: var(--muted); }
+  .err { font-size: 13px; color: var(--terracota); font-weight: 700; }
+  .err:empty { display: none; }
+  .row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  input[type=text], select, textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--linha); border-radius: 8px; font: 16px/1.5 Arial, sans-serif; background: #fff; color: var(--grafite); outline: none; }
+  input[type=text]:focus, select:focus, textarea:focus, .tagbox:focus-within { border-color: var(--grafite); }
+  textarea { resize: vertical; }
+  ::placeholder { color: #9A9890; }
+  .bad input[type=text], .bad select, .bad textarea, .bad .tagbox, .bad .photo { border-color: var(--terracota) !important; }
+  .counter { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .counter .c { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .counter .c.near { color: var(--terracota); }
+  .photo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .photo { flex: none; width: 96px; height: 120px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 1.5px dashed var(--linha); }
+  .tagbox { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px; min-height: 48px; border: 1.5px solid var(--linha); border-radius: 8px; background: #fff; }
+  .tagbox .chip { display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 12px; border: 1px solid var(--grafite); border-radius: 999px; font-size: 14px; }
+  .tagbox .chip button { width: 22px; height: 22px; border: 0; border-radius: 50%; background: var(--papel-2); cursor: pointer; font: 14px/22px Arial; padding: 0; color: var(--grafite); }
+  .tagbox input { flex: 1 1 140px; min-width: 0; border: 0; outline: none; padding: 6px; font: 16px Arial, sans-serif; background: transparent; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .opt { display: flex; align-items: center; gap: 12px; text-align: left; padding: 14px; min-height: 56px; border: 1.5px solid var(--linha); border-radius: 10px; background: #fff; cursor: pointer; font: 15px/1.35 Arial, sans-serif; color: var(--grafite); }
+  .opt .r { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--oc); display: flex; align-items: center; justify-content: center; }
+  .opt[aria-checked=true] { border-color: var(--oc); background: var(--ot); }
+  .opt[aria-checked=true] .r::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--oc); }
+  .areas { display: flex; flex-direction: column; border-top: 1px solid var(--linha); }
+  .area-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; padding: 10px 0; border-bottom: 1px solid var(--linha); }
+  .area-row .nm strong { display: block; font: 700 15px var(--display); }
+  .area-row .nm span { font-size: 13px; color: var(--muted); }
+  .seg { display: inline-flex; border: 1.5px solid var(--linha); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; background: #fff; padding: 8px 12px; font: 14px Arial, sans-serif; cursor: pointer; color: var(--grafite); }
+  .seg button + button { border-left: 1px solid var(--linha); }
+  .seg button[aria-pressed=true] { background: var(--grafite); color: #fff; }
+  .seg button[aria-pressed=true][data-v="2"] { background: var(--verde); }
+  .alert { margin-top: 24px; display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px; border-radius: 10px; font-size: 15px; }
+  .alert.bad { background: var(--terracota-t); border: 1.5px solid var(--terracota); }
+  .alert.info { background: var(--azul-t); border: 1.5px solid var(--azul); }
+  .alert .i { flex: none; width: 22px; height: 22px; border-radius: 50%; color: #fff; font: 700 14px/22px Arial; text-align: center; }
+  .alert.bad .i { background: var(--terracota); }
+  .alert.info .i { background: var(--azul); }
+  .check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 15px; }
+  .check input { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--verde); }
+  .done { padding: 48px var(--gutter) 64px; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  .done h2 { margin: 0; font: 700 30px/1.15 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+  .ok { width: 48px; height: 48px; border-radius: 50%; background: var(--verde); color: #fff; font: 700 24px/48px Arial; text-align: center; }
+  .preview { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; background: #fff; border: 1px solid var(--linha); border-radius: 12px; }
+  .preview .pf { flex: none; width: 88px; height: 110px; border-radius: 8px; overflow: hidden; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div id="demoBar" class="status demo" hidden><strong>Modo demonstração</strong><span>Nada é salvo. Configure <code>API_URL</code> em config.js.</span></div>
+<header class="f-head">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+    <span class="logo" style="font-size:30px">AUTH<span class="logo-dot"></span></span>
+    <span class="hint">Portfólio · Processo Seletivo Argo Menthor</span>
+  </div>
+  <h1>Seu perfil no portfólio da equipe</h1>
+  <p>As respostas abaixo geram automaticamente o seu card, o mapa de complementaridade e as seções de competências do portfólio. Escreva apenas informações verdadeiras: o recrutador da Argo Menthor pode pedir comprovação. Os limites de caracteres existem para tudo caber nas 5 páginas do PDF.</p>
+</header>
+
+<form id="form" novalidate>
+<main>
+  <div id="errBox" class="alert bad" role="alert" hidden><span class="i">!</span><div><strong id="errCount"></strong><br><span style="color:var(--texto-2)">Os campos marcados em terracota estão vazios ou incompletos.</span></div></div>
+  <div id="prevBox" class="alert info" hidden><span class="i">i</span><div>Encontramos suas respostas anteriores e já preenchemos o formulário. Se você reenviar, a versão nova substitui a anterior.</div></div>
+
+  <section class="fsec">
+    <div class="fsec-side"><div class="k">01</div><h2>Identificação</h2><p>Como você aparece no card de integrante.</p></div>
+    <div class="fsec-body">
+      <label class="field" data-f="nome">
+        <span class="lbl">Seu nome <span class="req">*</span></span>
+        <select name="nome" id="nome"><option value="">Selecione…</option></select>
+        <span class="err"></span>
+      </label>
+      <div class="photo-row" data-f="foto">
+        <label class="photo ph" id="photoBox" title="Enviar foto"><input type="file" id="fotoInput" accept="image/png,image/jpeg" hidden><span id="photoPh">foto<br>4:5</span></label>
+        <div style="flex:1 1 180px;display:flex;flex-direction:column;gap:6px">
+          <span class="lbl">Foto <span class="req">*</span></span>
+          <span class="hint">Rosto visível, fundo neutro. JPG ou PNG até 5 MB. Clique no quadro para enviar.</span>
+          <span class="err"></span>
+        </div>
+      </div>
+      <div class="row2">
+        <label class="field" data-f="cargo"><span class="lbl">Cargo atual <span class="req">*</span></span><input type="text" name="cargo" placeholder="Ex.: Analista de Projetos"><span class="err"></span></label>
+        <label class="field" data-f="empresa"><span class="lbl">Empresa atual <span class="req">*</span></span><input type="text" name="empresa" placeholder="Ex.: Empresa atual"><span class="err"></span></label>
+      </div>
+      <label class="field" data-f="formacao"><span class="lbl">Formação acadêmica <span class="req">*</span></span><input type="text" name="formacao" placeholder="Ex.: Engenharia Química · MBA FGV (em curso)"><span class="err"></span></label>
+    </div>
+  </section>
+
+  <section class="fsec">
+    <div class="fsec-side"><div class="k">02</div><h2>Hard skills</h2><p>Alimentam os cards e o mapa de complementaridade da equipe.</p></div>
+    <div class="fsec-body">
+      <div class="field" data-f="skills">
+        <div style="display:flex;justify-content:space-between;gap:8px"><span class="lbl">3 hard skills principais <span class="req">*</span></span><span class="hint" id="skillsCount">0/3</span></div>
+        <div class="tagbox" id="tagbox"><input type="text" id="skillInput" placeholder="Digite e tecle Enter"></div>
+        <span class="err"></span>
+        <span class="hint">Ex.: Modelagem financeira, Supply chain, Python.</span>
+      </div>
+      <label class="field" data-f="contrib">
+        <span class="lbl">Como minha formação contribui para a equipe <span class="req">*</span></span>
+        <textarea name="contrib" rows="3" placeholder="Que perspectiva só você traz para os desafios da Argo Menthor?"></textarea>
+        <div class="counter"><span class="err"></span><span class="c"></span></div>
+      </label>
+      <div class="field" data-f="areas">
+        <span class="lbl">Seu nível em cada área <span class="req">*</span></span>
+        <span class="hint">Especialista = sua área principal. Apoio = tem experiência relevante. Marque com honestidade: o mapa mostra como a equipe se complementa.</span>
+        <div class="areas" id="areas"></div>
+        <span class="err"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="fsec">
+    <div class="fsec-side"><div class="k">03</div><h2>Vivência cultural</h2><p>Vai para a linha do tempo multicultural.</p></div>
+    <div class="fsec-body">
+      <div class="field" data-f="cult_tipo">
+        <span class="lbl">Tipo <span class="req">*</span></span>
+        <div class="opts" id="tipoOpts" role="radiogroup"></div>
+        <span class="err"></span>
+      </div>
+      <div class="row2">
+        <label class="field" data-f="cult_local"><span class="lbl">Onde <span class="req">*</span></span><input type="text" name="cult_local" placeholder="Ex.: Lisboa, Portugal  ·  Manaus, AM"><span class="err"></span></label>
+        <label class="field" data-f="cult_periodo"><span class="lbl">Quando <span class="req">*</span></span><input type="text" name="cult_periodo" placeholder="Ex.: 2019 ou 2018–2020"><span class="err"></span></label>
+      </div>
+      <label class="field" data-f="cultural">
+        <span class="lbl">O que você viveu e o impacto disso no seu trabalho <span class="req">*</span></span>
+        <textarea name="cultural" rows="4" placeholder="O que fez lá, por quanto tempo e o que mudou na sua forma de trabalhar."></textarea>
+        <div class="counter"><span class="err"></span><span class="c"></span></div>
+      </label>
+    </div>
+  </section>
+
+  <section class="fsec">
+    <div class="fsec-side"><div class="k">04</div><h2>Soft skill de destaque</h2><p>Escolha uma. Ela define em qual competência você aparece como evidência. Combinem para cobrir as quatro.</p></div>
+    <div class="fsec-body">
+      <div class="field" data-f="soft">
+        <span class="lbl">Competência <span class="req">*</span></span>
+        <div class="opts" id="softOpts" role="radiogroup"></div>
+        <span class="err"></span>
+        <span class="hint" id="softTaken"></span>
+      </div>
+      <label class="field" data-f="exemplo">
+        <span class="lbl">Exemplo de uso dessa competência <span class="req">*</span></span>
+        <textarea name="exemplo" rows="3" placeholder="Uma ou duas frases com um exemplo concreto: situação, o que você fez e o resultado."></textarea>
+        <div class="counter"><span class="err"></span><span class="c"></span></div>
+      </label>
+    </div>
+  </section>
+
+  <section class="fsec">
+    <div class="fsec-side"><div class="k">05 · opcional</div><h2>Caso real</h2><p>Um caso da equipe vira o storytelling em destaque do portfólio. Se começar, preencha contexto, ação e resultado.</p></div>
+    <div class="fsec-body">
+      <label class="field" data-f="caso_titulo"><span class="lbl">Título do caso</span><input type="text" name="caso_titulo" placeholder="Ex.: A filial que precisava abastecer em metade do prazo"><span class="err"></span></label>
+      <div class="row2">
+        <label class="field" data-f="caso_empresa"><span class="lbl">Empresa</span><input type="text" name="caso_empresa" placeholder="Onde aconteceu"><span class="err"></span></label>
+        <label class="field" data-f="caso_ano"><span class="lbl">Ano</span><input type="text" name="caso_ano" placeholder="Ex.: 2023"><span class="err"></span></label>
+      </div>
+      <label class="field" data-f="caso_contexto"><span class="lbl">Contexto</span><textarea name="caso_contexto" rows="3" placeholder="Qual era a empresa, a área e o seu papel."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
+      <label class="field" data-f="caso_desafio"><span class="lbl">Desafio</span><textarea name="caso_desafio" rows="3" placeholder="O problema, o que estava em risco e a principal restrição."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
+      <label class="field" data-f="caso_acao"><span class="lbl">Ação</span><textarea name="caso_acao" rows="3" placeholder="O que você fez, em que ordem, e como a competência apareceu."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
+      <label class="field" data-f="caso_resultado"><span class="lbl">Resultado</span><textarea name="caso_resultado" rows="3" placeholder="O efeito mensurável: indicador, antes e depois, prazo."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:20px;padding:28px 0 0;border-top:1px solid var(--linha)">
+    <div data-f="aceite" class="field">
+      <label class="check"><input type="checkbox" name="aceite"><span>Declaro que as informações acima são verdadeiras e autorizo seu uso no portfólio da equipe AUTH.</span></label>
+      <span class="err"></span>
+    </div>
+    <div id="sendErr" class="alert bad" hidden><span class="i">!</span><div id="sendErrMsg"></div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <button type="submit" class="btn" id="submitBtn" style="flex:1 1 220px;max-width:320px;min-height:52px">Enviar para o portfólio</button>
+      <span class="hint">* campos obrigatórios</span>
+    </div>
+  </section>
+</main>
+</form>
+
+<div id="done" class="done" hidden>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <span class="ok">✓</span>
+    <h2>Perfil recebido. Sua parte já tem autoria.</h2>
+    <p class="lead">As respostas foram registradas e já aparecem no portfólio. Você pode revisar e reenviar até o fechamento da entrega.</p>
+  </div>
+  <div class="preview" id="preview"></div>
+  <div style="display:flex;flex-wrap:wrap;gap:12px">
+    <button type="button" class="btn sec" id="editBtn">Revisar respostas</button>
+    <a class="btn" href="index.html">Ver portfólio da equipe</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  const { C, SOFT, LIMITS, esc, softById, isDemo, loadTeam, submit, resizeImage } = window.AUTH;
+  const $ = s => document.querySelector(s);
+  const form = $('#form');
+  const st = { skills: [], soft: '', tipo: '', areas: {}, fotoData: '', fotoId: '', fotoPreview: '' };
+  let team = [];
+
+  if (isDemo()) $('#demoBar').hidden = false;
+
+  // Nomes
+  C.INTEGRANTES.forEach(n => $('#nome').insertAdjacentHTML('beforeend', `<option>${esc(n)}</option>`));
+
+  // Limites e contadores
+  Object.entries(LIMITS).forEach(([k, max]) => {
+    const el = form.elements[k];
+    if (!el) return;
+    el.maxLength = max;
+    const c = el.closest('.field').querySelector('.c');
+    if (c) { const upd = () => { c.textContent = `${el.value.length}/${max}`; c.classList.toggle('near', el.value.length >= max * 0.9); }; el.addEventListener('input', upd); upd(); el._upd = upd; }
+  });
+  $('#skillInput').maxLength = LIMITS.skill;
+
+  // Áreas
+  $('#areas').innerHTML = C.AREAS.map(a => `
+    <div class="area-row"><div class="nm"><strong>${esc(a.area)}</strong><span>${esc(a.bu)}</span></div>
+      <div class="seg" data-a="${a.id}">${['Não atuo', 'Apoio', 'Especialista'].map((t, v) => `<button type="button" data-v="${v}" aria-pressed="${v === 0}">${t}</button>`).join('')}</div>
+    </div>`).join('');
+  $('#areas').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const seg = b.parentElement; st.areas[seg.dataset.a] = +b.dataset.v;
+    seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    clearErr('areas');
+  });
+  function paintAreas() {
+    document.querySelectorAll('.seg').forEach(seg => { const v = st.areas[seg.dataset.a] || 0; seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', +x.dataset.v === v)); });
+  }
+
+  // Opções (tipo e soft)
+  function opts(el, list, key) {
+    el.innerHTML = list.map(o => `<button type="button" class="opt" role="radio" aria-checked="false" data-id="${o.id}" style="--oc:${o.cor};--ot:${o.tint}"><span class="r"></span><span>${esc(o.label)}</span></button>`).join('');
+    el.addEventListener('click', e => { const b = e.target.closest('.opt'); if (!b) return; st[key] = b.dataset.id; paintOpts(); clearErr(key === 'tipo' ? 'cult_tipo' : 'soft'); });
+  }
+  function paintOpts() {
+    document.querySelectorAll('#tipoOpts .opt').forEach(b => b.setAttribute('aria-checked', b.dataset.id === st.tipo));
+    document.querySelectorAll('#softOpts .opt').forEach(b => b.setAttribute('aria-checked', b.dataset.id === st.soft));
+  }
+  opts($('#tipoOpts'), [{ id: 'Nacional', label: 'Nacional', cor: '#2F7A5F', tint: '#E3EFE9' }, { id: 'Internacional', label: 'Internacional', cor: '#3C67A3', tint: '#E4EAF3' }], 'tipo');
+  opts($('#softOpts'), SOFT, 'soft');
+
+  // Tags
+  function paintSkills() {
+    document.querySelectorAll('#tagbox .chip').forEach(c => c.remove());
+    st.skills.forEach((t, i) => $('#skillInput').insertAdjacentHTML('beforebegin', `<span class="chip">${esc(t)}<button type="button" data-i="${i}" aria-label="Remover">×</button></span>`));
+    $('#skillInput').hidden = st.skills.length >= 3;
+    $('#skillsCount').textContent = `${st.skills.length}/3`;
+  }
+  function addSkill() {
+    const inp = $('#skillInput'); const t = inp.value.trim().replace(/,$/, '');
+    if (t && st.skills.length < 3 && !st.skills.includes(t)) { st.skills.push(t); clearErr('skills'); }
+    inp.value = ''; paintSkills(); if (!inp.hidden) inp.focus();
+  }
+  $('#skillInput').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addSkill(); } });
+  $('#skillInput').addEventListener('blur', () => { if ($('#skillInput').value.trim()) addSkill(); });
+  $('#tagbox').addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if (b) { st.skills.splice(+b.dataset.i, 1); paintSkills(); } else $('#skillInput').focus(); });
+
+  // Foto
+  function paintPhoto() {
+    const src = st.fotoPreview;
+    $('#photoPh').hidden = !!src;
+    const old = $('#photoBox img'); if (old) old.remove();
+    if (src) $('#photoBox').insertAdjacentHTML('beforeend', `<img class="foto" src="${esc(src)}" alt="Sua foto">`);
+  }
+  $('#fotoInput').addEventListener('change', async e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    if (f.size > 5 * 1024 * 1024) return setErr('foto', 'Arquivo acima de 5 MB.');
+    try { st.fotoData = await resizeImage(f); st.fotoPreview = st.fotoData; paintPhoto(); clearErr('foto'); }
+    catch (err) { setErr('foto', 'Não consegui ler essa imagem. Tente outro arquivo JPG ou PNG.'); }
+  });
+
+  // Erros
+  const fieldEl = k => document.querySelector(`[data-f="${k}"]`);
+  function setErr(k, msg) { const f = fieldEl(k); if (!f) return; f.classList.add('bad'); f.querySelector('.err').textContent = msg; }
+  function clearErr(k) {
+    const f = fieldEl(k); if (!f) return; f.classList.remove('bad'); f.querySelector('.err').textContent = '';
+    const left = document.querySelectorAll('[data-f].bad').length;
+    if (!left) $('#errBox').hidden = true;
+    else $('#errCount').textContent = left === 1 ? 'Falta 1 campo para enviar.' : `Faltam ${left} campos para enviar.`;
+  }
+  form.addEventListener('input', e => { const f = e.target.closest('[data-f]'); if (f) clearErr(f.dataset.f); });
+  form.addEventListener('change', e => { const f = e.target.closest('[data-f]'); if (f && e.target.id !== 'fotoInput') clearErr(f.dataset.f); });
+
+  const v = k => (form.elements[k] ? form.elements[k].value.trim() : '');
+  function validate() {
+    const e = {};
+    if (!v('nome')) e.nome = 'Selecione seu nome.';
+    if (!st.fotoData && !st.fotoId) e.foto = 'Envie uma foto para o card.';
+    if (!v('cargo')) e.cargo = 'Informe o cargo atual.';
+    if (!v('empresa')) e.empresa = 'Informe a empresa atual.';
+    if (!v('formacao')) e.formacao = 'Informe sua formação.';
+    if (st.skills.length < 3) { const f = 3 - st.skills.length; e.skills = `Adicione 3 hard skills (falta${f > 1 ? 'm' : ''} ${f}).`; }
+    if (!v('contrib')) e.contrib = 'Conte como sua formação contribui.';
+    if (!Object.values(st.areas).some(x => x > 0)) e.areas = 'Marque pelo menos uma área como Especialista ou Apoio.';
+    if (!st.tipo) e.cult_tipo = 'Escolha nacional ou internacional.';
+    if (!v('cult_local')) e.cult_local = 'Informe onde foi.';
+    if (!v('cult_periodo')) e.cult_periodo = 'Informe quando foi.';
+    if (!v('cultural')) e.cultural = 'Descreva a experiência e o impacto.';
+    if (!st.soft) e.soft = 'Escolha uma soft skill.';
+    if (!v('exemplo')) e.exemplo = 'Dê um exemplo da competência escolhida.';
+    const caso = ['caso_titulo', 'caso_empresa', 'caso_ano', 'caso_contexto', 'caso_desafio', 'caso_acao', 'caso_resultado'];
+    if (caso.some(v)) ['caso_contexto', 'caso_acao', 'caso_resultado'].forEach(k => { if (!v(k)) e[k] = 'Para o caso entrar no portfólio, preencha este campo.'; });
+    if (!form.elements.aceite.checked) e.aceite = 'Confirme que as informações são verdadeiras.';
+    return e;
+  }
+
+  // Pré-preenchimento com respostas anteriores
+  function fill(m) {
+    const set = (k, val) => { if (form.elements[k]) { form.elements[k].value = val || ''; form.elements[k]._upd && form.elements[k]._upd(); } };
+    const r = m.raw || {};
+    ['cargo', 'empresa', 'formacao', 'contrib', 'cult_local', 'cult_periodo', 'cultural', 'exemplo', 'caso_titulo', 'caso_empresa', 'caso_ano', 'caso_contexto', 'caso_desafio', 'caso_acao', 'caso_resultado'].forEach(k => set(k, r[k]));
+    st.skills = m.skills.slice(0, 3); st.soft = m.soft; st.tipo = m.cult.tipo; st.areas = { ...m.areas };
+    st.fotoId = m.fotoId; st.fotoData = ''; st.fotoPreview = m.foto;
+    paintSkills(); paintOpts(); paintAreas(); paintPhoto();
+  }
+  $('#nome').addEventListener('change', () => {
+    const m = team.find(x => x.nome === v('nome') && !x.pendente);
+    $('#prevBox').hidden = !m;
+    if (m) fill(m);
+    paintTaken();
+  });
+  function paintTaken() {
+    const others = team.filter(x => !x.pendente && x.nome !== v('nome') && x.soft);
+    const left = SOFT.filter(s => !others.some(o => o.soft === s.id));
+    $('#softTaken').textContent = others.length
+      ? (left.length ? `Ainda sem ninguém: ${left.map(s => s.label).join(' · ')}.` : 'As quatro competências já têm pelo menos uma pessoa.')
+      : '';
+  }
+
+  // Envio
+  form.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    document.querySelectorAll('[data-f]').forEach(f => clearErr(f.dataset.f));
+    $('#sendErr').hidden = true;
+    const errs = validate();
+    const n = Object.keys(errs).length;
+    if (n) {
+      Object.entries(errs).forEach(([k, m]) => setErr(k, m));
+      $('#errCount').textContent = n === 1 ? 'Falta 1 campo para enviar.' : `Faltam ${n} campos para enviar.`;
+      $('#errBox').hidden = false;
+      $('#errBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    $('#errBox').hidden = true;
+    const payload = {
+      nome: v('nome'), cargo: v('cargo'), empresa: v('empresa'), formacao: v('formacao'),
+      skill1: st.skills[0], skill2: st.skills[1], skill3: st.skills[2], contrib: v('contrib'),
+      areas: st.areas, cult_tipo: st.tipo, cult_local: v('cult_local'), cult_periodo: v('cult_periodo'), cultural: v('cultural'),
+      soft: st.soft, exemplo: v('exemplo'),
+      caso_titulo: v('caso_titulo'), caso_empresa: v('caso_empresa'), caso_ano: v('caso_ano'),
+      caso_contexto: v('caso_contexto'), caso_desafio: v('caso_desafio'), caso_acao: v('caso_acao'), caso_resultado: v('caso_resultado'),
+      aceite: true, fotoData: st.fotoData || '', fotoId: st.fotoData ? '' : st.fotoId
+    };
+    const btn = $('#submitBtn'); btn.disabled = true; btn.textContent = 'Enviando…';
+    try {
+      const r = await submit(payload);
+      if (!r.ok) throw new Error(r.error || 'erro desconhecido');
+      if (r.fotoId) { st.fotoId = r.fotoId; st.fotoData = ''; }
+      showDone(payload);
+    } catch (err) {
+      $('#sendErrMsg').textContent = 'Não foi possível enviar: ' + (err.message || err) + '. Tente de novo em instantes; se persistir, avise o Gabriel.';
+      $('#sendErr').hidden = false;
+    } finally { btn.disabled = false; btn.textContent = 'Enviar para o portfólio'; }
+  });
+
+  function showDone(p) {
+    const s = softById(p.soft);
+    $('#preview').innerHTML = `
+      <div class="pf ph">${st.fotoPreview ? `<img class="foto" src="${esc(st.fotoPreview)}" alt="">` : 'foto'}</div>
+      <div style="flex:1 1 220px;display:flex;flex-direction:column;gap:6px">
+        <span style="font:800 13px var(--display);color:var(--verde)">CARD DO INTEGRANTE · PRÉVIA</span>
+        <strong style="font:700 20px/1.2 var(--display)">${esc(p.nome)}</strong>
+        <span style="font-size:14px;color:var(--texto-2)">${esc(p.cargo)} · ${esc(p.empresa)}</span>
+        <span class="muted" style="font-size:14px">${esc(p.formacao)}</span>
+        <div class="tags" style="margin-top:6px">${[p.skill1, p.skill2, p.skill3].map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+        <span style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:14px"><span style="width:10px;height:10px;background:${s.cor}"></span>${esc(s.label)}</span>
+      </div>`;
+    form.hidden = true; $('#done').hidden = false; window.scrollTo(0, 0);
+  }
+  $('#editBtn').addEventListener('click', () => { $('#done').hidden = true; form.hidden = false; window.scrollTo(0, 0); });
+
+  // Carrega respostas existentes (para pré-preencher e sugerir competências)
+  loadTeam().then(r => {
+    team = r.demo ? [] : r.membros;
+    const q = new URLSearchParams(location.search).get('nome');
+    if (q && C.INTEGRANTES.includes(q)) { $('#nome').value = q; $('#nome').dispatchEvent(new Event('change')); }
+    paintTaken();
+  });
+  paintSkills();
+})();
+</script>
+</body>
+</html>

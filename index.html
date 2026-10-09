@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfólio da Equipe AUTH</title>
+<meta name="description" content="Portfólio da Equipe AUTH – Processo Seletivo Argo Menthor · MBA Online FGV">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D2026'/%3E%3Crect x='19' y='19' width='7' height='7' fill='%232F7A5F'/%3E%3C/svg%3E">
+<script src="config.js"></script>
+<script src="assets/auth.js"></script>
+</head>
+<body>
+<div id="app"><div class="loading">Carregando o portfólio…</div></div>
+
+<script>
+(async function () {
+  const { C, SOFT, esc, logo, loadTeam, derive } = window.AUTH;
+  const { membros, demo, error } = await loadTeam();
+  const D = derive(membros);
+  const S = D.stats;
+
+  const photo = (m, label) => m.foto
+    ? `<img class="foto" src="${esc(m.foto)}" alt="Foto de ${esc(m.nome)}" loading="lazy">`
+    : `<div class="ph" style="width:100%;height:100%">${esc(label)}</div>`;
+
+  // Barra de status (some na impressão; não faz parte do portfólio)
+  const pend = membros.filter(m => m.pendente).map(m => m.nome.split(' ')[0]);
+  const semEv = D.skills.filter(k => !k.ev.length).map(k => k.label);
+  const status = demo
+    ? `<div class="status demo"><strong>Modo demonstração</strong><span>Dados de exemplo. Configure <code>API_URL</code> em config.js para ler a planilha.</span><a href="formulario.html">Formulário →</a></div>`
+    : `<div class="status">
+        <span class="pill">${S.preenchidos}/5 perfis preenchidos</span>
+        ${pend.length ? `<span>Faltam: ${esc(pend.join(', '))}</span>` : '<span>Todos preencheram ✓</span>'}
+        ${semEv.length ? `<span class="warn">Sem evidência: ${esc(semEv.join(' · '))}</span>` : ''}
+        ${D.caso ? '' : '<span class="warn">Nenhum caso real ainda</span>'}
+        ${error ? `<span class="warn">Erro ao ler a planilha: ${esc(error)}</span>` : ''}
+        <a href="formulario.html">Formulário →</a>
+      </div>`;
+
+  const cover = `
+  <header class="cover">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <span class="eyebrow">MBA Online FGV · Processo seletivo</span>
+      <h1>Portfólio da Equipe AUTH – Processo Seletivo Argo Menthor</h1>
+    </div>
+    <div class="cover-people">
+      ${membros.map(m => `
+        <div class="cover-person">
+          <div class="cover-photo">${photo(m, 'foto integrante ' + m.n)}</div>
+          <div class="cover-name"><b>${m.n}</b><span>${esc(m.nome)}</span></div>
+        </div>`).join('')}
+    </div>
+  </header>`;
+
+  const manifesto = `
+  <section class="block white">
+    <div class="manifesto">
+      <div>
+        <span class="eyebrow">Quem somos</span>
+        <div style="margin-top:20px"><span class="logo" style="font-size:64px">AUTH<span class="logo-dot"></span></span></div>
+        <p class="muted" style="margin:12px 0 0;font-size:15px">de autoria · autenticidade · autoridade</p>
+      </div>
+      <div class="wide">
+        <p class="big">${esc(C.MANIFESTO)}</p>
+        <div class="highlights">
+          <div><strong>Formações que se completam</strong><p>${S.areasCobertas} de ${C.AREAS.length} áreas de conhecimento com um especialista na equipe.</p></div>
+          <div><strong>Repertório multicultural</strong><p>${S.intl} vivência${S.intl === 1 ? '' : 's'} internaciona${S.intl === 1 ? 'l' : 'is'} e ${S.nac} nacion${S.nac === 1 ? 'al' : 'ais'}.</p></div>
+          <div><strong>4 soft skills com evidências</strong><p>${S.softCobertas} de 4 competências comprovadas por integrantes.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+
+  const cards = `
+  <section id="integrantes" class="block">
+    <div class="block-head" style="grid-template-columns:1fr"><div><span class="eyebrow">01 · Integrantes</span><h2 class="h2">Cinco autores, uma assinatura</h2></div></div>
+    <div class="cards">
+      ${membros.map(m => m.pendente ? `
+        <article class="card pend">
+          <div class="card-photo">${photo(m, 'aguardando foto')}</div>
+          <div class="card-body"><div class="card-top"><h3>${esc(m.nome)}</h3><b>${m.n}</b></div><span class="pend-note">Aguardando preenchimento do formulário.</span></div>
+        </article>` : `
+        <article class="card">
+          <div class="card-photo">${photo(m, 'foto · integrante ' + m.n)}</div>
+          <div class="card-body">
+            <div class="card-top"><h3>${esc(m.nome)}</h3><b>${m.n}</b></div>
+            <div style="font-size:15px;line-height:1.45;color:var(--texto-2)">${esc([m.cargo, m.empresa].filter(Boolean).join(' · '))}<br><span class="muted">${esc(m.formacao)}</span></div>
+            <div class="tags">${m.skills.map(s => `<span class="tag">${esc(s)}</span>`).join('')}</div>
+            <p class="card-contrib">${esc(m.contrib)}</p>
+          </div>
+        </article>`).join('')}
+    </div>
+  </section>`;
+
+  const matrix = `
+  <section id="mapa" class="block white">
+    <div class="block-head">
+      <div><span class="eyebrow">02 · Mapa de complementaridade</span><h2 class="h2">Nenhuma frente descoberta</h2></div>
+      <p class="lead">Cada área de conhecimento e a unidade de negócio da Argo Menthor onde ela pesa mais. Os pontos mostram quem é especialista e quem dá apoio.</p>
+    </div>
+    <div class="matrix-wrap"><div class="matrix">
+      <div class="th">ÁREA</div>
+      ${membros.map(m => `<div class="th c" title="${esc(m.nome)}">${m.n}</div>`).join('')}
+      <div class="th">COBERTURA</div>
+      ${D.matrix.map(r => `
+        <div class="area"><strong>${esc(r.area)}</strong><span>${esc(r.bu)}</span></div>
+        ${r.cells.map(c => `<div class="td"><span class="dot${c}" title="${['Sem atuação', 'Apoio', 'Especialista'][c]}"></span></div>`).join('')}
+        <div class="cov"><span class="bar"><span style="width:${r.pct}%"></span></span><span class="v">${r.score}</span></div>`).join('')}
+    </div></div>
+    <div class="legend">
+      <span><span class="dot2" style="width:16px;height:16px"></span>Especialista (hard skill principal)</span>
+      <span><span class="dot1" style="width:16px;height:16px"></span>Apoio (experiência relevante)</span>
+      <span><span class="dot0"></span>Sem atuação</span>
+    </div>
+    <p class="muted" style="margin:16px 0 0;font-size:14px">${membros.map(m => `${m.n} ${esc(m.nome)}`).join(' · ')}</p>
+  </section>`;
+
+  const trips = `
+  <section id="vivencias" class="block">
+    <div class="block-head">
+      <div><span class="eyebrow">03 · Vivência multicultural</span><h2 class="h2">Onde aprendemos a trabalhar com quem é diferente</h2></div>
+      <p class="lead">Experiências em ordem cronológica. Para uma empresa com filiais em vários países, isso significa menos ruído entre culturas e mais velocidade na integração.</p>
+    </div>
+    <div class="trips">
+      ${D.trips.length ? D.trips.map(t => `
+        <div class="trip" style="--c:${t.intl ? 'var(--azul)' : 'var(--verde)'};--t:${t.intl ? 'var(--azul-t)' : 'var(--verde-t)'}">
+          <span class="when">${esc(t.periodo || '—')}</span>
+          <div class="where"><span class="kind">${t.intl ? 'Internacional' : 'Nacional'}</span><span>${esc(t.local)}</span></div>
+          <span class="muted" style="font-size:14px">${esc(t.nome)}</span>
+          <p>${esc(t.texto)}</p>
+        </div>`).join('') : '<p class="muted">As vivências aparecem aqui conforme os integrantes preenchem o formulário.</p>'}
+    </div>
+  </section>`;
+
+  const skills = `
+  <section id="competencias" class="block white">
+    <div style="margin-bottom:40px"><span class="eyebrow">04 · As 4 competências</span><h2 class="h2">Soft skills com prova</h2></div>
+    <div>
+      ${D.skills.map(k => `
+        <div class="skill">
+          <div class="skill-name">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:14px;height:14px;background:${k.cor}"></span><span style="font:800 15px var(--display);color:${k.cor}">${k.n}</span></div>
+            <h3>${esc(k.label)}</h3>
+            <p class="lead" style="font-size:15px">${esc(k.def)}</p>
+          </div>
+          <div class="skill-ev">
+            ${k.ev.length ? k.ev.map(v => `<figure style="background:${k.tint}"><blockquote>${esc(v.txt)}</blockquote><figcaption>${esc(v.quem)}</figcaption></figure>`).join('')
+              : `<figure class="empty"><blockquote>Ainda sem evidência. Alguém da equipe precisa escolher esta competência no formulário.</blockquote></figure>`}
+          </div>
+        </div>`).join('')}
+    </div>
+  </section>`;
+
+  const caso = D.caso ? `
+  <section id="caso" class="block">
+    <div class="block-head">
+      <div><span class="eyebrow">05 · Caso real em destaque</span><h2 class="h2">${esc(D.caso.titulo)}</h2></div>
+      <div style="align-self:end;display:flex;flex-direction:column;gap:6px;font-size:15px;color:var(--texto-2)">
+        <span><strong style="color:var(--grafite)">${esc(D.caso.quem)}</strong>${D.caso.soft ? ' · ' + esc(D.caso.soft.label) : ''}</span>
+        ${D.caso.meta ? `<span>${esc(D.caso.meta)}</span>` : ''}
+      </div>
+    </div>
+    <ol class="steps">
+      ${D.caso.passos.map((p, i, a) => `<li class="${i === a.length - 1 ? 'last' : ''}"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="lbl">${p[0]}</span></div><p>${esc(p[1])}</p></li>`).join('')}
+    </ol>
+  </section>` : `
+  <section id="caso" class="block">
+    <span class="eyebrow">05 · Caso real em destaque</span><h2 class="h2">Aguardando um caso real</h2>
+    <p class="lead" style="margin-top:16px">Pelo menos um integrante precisa preencher a seção "Caso real" do formulário.</p>
+  </section>`;
+
+  const closing = `
+  <section class="closing">
+    <p class="phrase">${esc(C.FRASE_FINAL)}<span style="color:var(--verde)">.</span></p>
+    <div class="decl">
+      <p>A equipe AUTH informa que os integrantes a seguir colaboraram efetivamente na realização do desafio:</p>
+      <div class="decl-names">${C.INTEGRANTES.map(n => `<span>${esc(n)}</span>`).join('')}</div>
+    </div>
+    <footer class="foot"><span>AUTH · MBA Online FGV · ${esc(C.DISCIPLINA)} · ${esc(C.DATA)}</span><span>Todas as informações foram fornecidas pelos próprios integrantes.</span></footer>
+  </section>`;
+
+  const nav = `
+  <nav class="nav">
+    ${logo()}
+    <div class="nav-links">
+      <a href="#integrantes">Integrantes</a><a href="#mapa">Complementaridade</a><a href="#vivencias">Vivências</a>
+      <a href="#competencias">Competências</a><a href="#caso">Caso real</a>
+      <a class="acc" href="pdf.html${demo && C.API_URL ? '?demo' : ''}">Versão PDF ↗</a>
+    </div>
+  </nav>`;
+
+  document.getElementById('app').innerHTML = status + nav + cover + manifesto + cards + matrix + trips + skills + caso + closing;
+})();
+</script>
+</body>
+</html>
