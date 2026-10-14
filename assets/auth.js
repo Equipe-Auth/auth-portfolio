@@ -3,10 +3,10 @@
   const C = window.AUTH_CONFIG;
 
   const SOFT = [
-    { id: 'com', label: 'Relacionamento interpessoal e comunicação', cor: '#3C67A3', tint: '#E4EAF3', def: 'Construir confiança e alinhar públicos diferentes, das filiais à diretoria.' },
-    { id: 'res', label: 'Resiliência', cor: '#B65A3C', tint: '#F5E5DE', def: 'Manter qualidade e ritmo quando o cenário muda no meio do caminho.' },
-    { id: 'pla', label: 'Planejamento e organização', cor: '#2F7A5F', tint: '#E3EFE9', def: 'Transformar objetivos em etapas, responsáveis e prazos realistas.' },
-    { id: 'sto', label: 'Storytelling', cor: '#1D2026', tint: '#ECE9E2', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
+    { id: 'com', label: 'Relacionamento interpessoal e comunicação', cor: '#1F5FD6', tint: '#E3ECFB', def: 'Construir confiança e alinhar públicos diferentes, das filiais à diretoria.' },
+    { id: 'res', label: 'Resiliência', cor: '#E4237A', tint: '#FBE3EE', def: 'Manter qualidade e ritmo quando o cenário muda no meio do caminho.' },
+    { id: 'pla', label: 'Planejamento e organização', cor: '#13A3AF', tint: '#DDF3F4', def: 'Transformar objetivos em etapas, responsáveis e prazos realistas.' },
+    { id: 'sto', label: 'Storytelling', cor: '#F08A1C', tint: '#FDEBD7', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
   ];
 
   // Limites calibrados para o PDF caber em capa + 5 laudas (Arial 12, espaçamento 1,5).
@@ -21,7 +21,8 @@
   const num = i => String(i + 1).padStart(2, '0');
   const fotoUrl = id => (id ? 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w800' : '');
   const softById = id => SOFT.find(s => s.id === id);
-  const logo = (cls = '') => `<span class="logo ${cls}">AUTH<span class="logo-dot"></span></span>`;
+  const logo = (cls = '') => `<img class="logo ${cls}" src="assets/logo-auth.png" alt="AUTH">`;
+  const cor = i => (C.CORES || [])[i % (C.CORES || ['#1F5FD6']).length] || '#1F5FD6';
   const isDemo = () => !C.API_URL || new URLSearchParams(location.search).has('demo');
 
   function normalize(r, i) {
@@ -29,7 +30,7 @@
     if (typeof areas === 'string') { try { areas = JSON.parse(areas || '{}'); } catch (e) { areas = {}; } }
     const s = k => String(r[k] == null ? '' : r[k]).trim();
     return {
-      n: num(i), nome: C.INTEGRANTES[i], pendente: false,
+      n: num(i), nome: C.INTEGRANTES[i], pendente: false, cor: cor(i),
       cargo: s('cargo'), empresa: s('empresa'), formacao: s('formacao'),
       skills: [s('skill1'), s('skill2'), s('skill3')].filter(Boolean),
       contrib: s('contrib'),
@@ -40,7 +41,29 @@
     };
   }
 
-  const pending = i => ({ n: num(i), nome: C.INTEGRANTES[i], pendente: true, skills: [], cult: {}, caso: {}, areas: {}, foto: '' });
+  const pending = i => ({ n: num(i), nome: C.INTEGRANTES[i], pendente: true, cor: cor(i), skills: [], cult: {}, caso: {}, areas: {}, foto: '' });
+
+  // Completa o integrante com o perfil do design v2 (config.js → PERFIS). O formulário tem prioridade.
+  function withPerfil(m) {
+    const p = (C.PERFIS || {})[m.nome];
+    m.fonte = m.pendente ? '' : 'form';
+    m.frase = ''; m.softIds = m.soft ? [m.soft] : []; m.pos = '50% 20%';
+    if (!p) return m;
+    if (m.pendente) Object.assign(m, { pendente: false, fonte: 'perfil', cargo: '', empresa: '', formacao: '', contrib: '' });
+    // Áreas do formulário só valem se marcarem alguma das áreas atuais do mapa
+    const formAreas = C.AREAS.some(a => Number((m.areas || {})[a.id]) > 0);
+    return Object.assign(m, {
+      frase: p.frase || '',
+      cargo: m.cargo || p.cargo || '',
+      formacao: m.formacao || p.formacao || '',
+      skills: m.skills.length ? m.skills : (p.hard || []),
+      contrib: m.contrib || p.resumo || '',
+      softIds: [...new Set([...m.softIds, ...(p.soft || [])])],
+      areas: formAreas ? m.areas : (p.areas || {}),
+      foto: m.foto || p.foto || '',
+      pos: p.pos || m.pos
+    });
+  }
 
   // Dados de exemplo (modo demonstração). Nomes genéricos para não atribuir nada a pessoas reais.
   const DEMO = [
@@ -53,7 +76,7 @@
 
   async function loadTeam() {
     if (isDemo()) {
-      const membros = DEMO.slice(0, C.INTEGRANTES.length).map((r, i) => Object.assign(normalize(r, i), { nome: 'Nome do Integrante ' + (i + 1) }));
+      const membros = DEMO.slice(0, C.INTEGRANTES.length).map((r, i) => Object.assign(normalize(r, i), { nome: 'Nome do Integrante ' + (i + 1), frase: '', softIds: [r.soft], pos: '50% 20%' }));
       return { membros, demo: true };
     }
     try {
@@ -62,10 +85,10 @@
       if (!data.ok) throw new Error(data.error || 'Resposta inválida');
       const byName = {};
       (data.membros || []).forEach(r => { byName[String(r.nome).trim()] = r; });
-      const membros = C.INTEGRANTES.map((nome, i) => (byName[nome] ? normalize(byName[nome], i) : pending(i)));
+      const membros = C.INTEGRANTES.map((nome, i) => withPerfil(byName[nome] ? normalize(byName[nome], i) : pending(i)));
       return { membros, demo: false };
     } catch (err) {
-      return { membros: C.INTEGRANTES.map((_, i) => pending(i)), demo: false, error: String(err.message || err) };
+      return { membros: C.INTEGRANTES.map((_, i) => withPerfil(pending(i))), demo: false, error: String(err.message || err) };
     }
   }
 
@@ -105,12 +128,16 @@
     const matrix = C.AREAS.map(a => {
       const cells = membros.map(m => Number((m.areas || {})[a.id]) || 0);
       const score = cells.reduce((x, y) => x + y, 0);
-      return { ...a, cells, score, pct: Math.min(100, (score / 4) * 100) };
+      return { ...a, cells, score, pct: Math.min(100, (score / (2 * membros.length)) * 100) };
     });
     const year = p => { const m = String(p || '').match(/\d{4}/); return m ? +m[0] : 9999; };
     const trips = filled.filter(m => m.cult.texto).map(m => ({ ...m.cult, nome: m.nome, n: m.n, intl: /intern/i.test(m.cult.tipo) }))
       .sort((a, b) => year(a.periodo) - year(b.periodo));
-    const skills = SOFT.map((k, i) => ({ ...k, n: num(i), ev: filled.filter(m => m.soft === k.id && m.exemplo).map(m => ({ quem: m.nome, txt: m.exemplo })) }));
+    const skills = SOFT.map((k, i) => ({
+      ...k, n: num(i),
+      ev: filled.filter(m => m.soft === k.id && m.exemplo).map(m => ({ quem: m.nome, txt: m.exemplo })),
+      quem: filled.filter(m => (m.softIds || []).includes(k.id)).map(m => m.nome.split(' ')[0])
+    }));
     const hasCaso = m => !m.pendente && m.caso.contexto && m.caso.acao && m.caso.resultado;
     const casoM = membros.find(m => m.nome === C.CASO_DESTAQUE && hasCaso(m)) || membros.find(hasCaso) || null;
     const caso = casoM ? {
