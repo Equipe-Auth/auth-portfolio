@@ -337,7 +337,7 @@
     paintSkills(); paintOpts(); paintAreas(); paintPhoto();
   }
   $('#nome').addEventListener('change', () => {
-    const m = team.find(x => x.nome === v('nome') && !x.pendente);
+    const m = team.find(x => x.nome === v('nome') && x.fonte === 'form');
     $('#prevBox').hidden = !m;
     if (m) fill(m);
     paintTaken();

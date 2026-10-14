@@ -27,13 +27,13 @@
     : `<div class="ph" style="width:100%;height:100%">${esc(label)}</div>`;
 
   // Barra de status (some na impressão; não faz parte do portfólio)
-  const pend = membros.filter(m => m.pendente).map(m => m.nome.split(' ')[0]);
+  const pend = membros.filter(m => m.fonte !== 'form').map(m => m.nome.split(' ')[0]);
   const semEv = D.skills.filter(k => !k.ev.length).map(k => k.label);
   const status = demo
     ? `<div class="status demo"><strong>Modo demonstração</strong><span>Dados de exemplo. Configure <code>API_URL</code> em config.js para ler a planilha.</span><a href="formulario.html">Formulário →</a></div>`
     : `<div class="status">
-        <span class="pill">${S.preenchidos}/5 perfis preenchidos</span>
-        ${pend.length ? `<span>Faltam: ${esc(pend.join(', '))}</span>` : '<span>Todos preencheram ✓</span>'}
+        <span class="pill">${S.preenchidos}/${membros.length} perfis no portfólio</span>
+        ${pend.length ? `<span>Formulário pendente: ${esc(pend.join(', '))}</span>` : '<span>Todos preencheram o formulário ✓</span>'}
         ${semEv.length ? `<span class="warn">Sem evidência: ${esc(semEv.join(' · '))}</span>` : ''}
         ${D.caso ? '' : '<span class="warn">Nenhum caso real ainda</span>'}
         ${error ? `<span class="warn">Erro ao ler a planilha: ${esc(error)}</span>` : ''}
@@ -61,14 +61,12 @@
       <div>
         <span class="eyebrow">Quem somos</span>
         <div style="margin-top:20px"><img class="logo-full" src="assets/logo-auth.png" alt="AUTH"></div>
-        <p class="muted" style="margin:12px 0 0;font-size:15px">de autoria · autenticidade · autoridade</p>
+        <p class="muted" style="margin:12px 0 0;font-size:15px">${esc(C.SLOGAN || '')}</p>
       </div>
       <div class="wide">
         <p class="big">${esc(C.MANIFESTO)}</p>
         <div class="highlights">
-          <div><strong>Formações que se completam</strong><p>${S.areasCobertas} de ${C.AREAS.length} áreas de conhecimento com um especialista na equipe.</p></div>
-          <div><strong>Repertório multicultural</strong><p>${S.intl} vivência${S.intl === 1 ? '' : 's'} internaciona${S.intl === 1 ? 'l' : 'is'} e ${S.nac} nacion${S.nac === 1 ? 'al' : 'ais'}.</p></div>
-          <div><strong>4 soft skills com evidências</strong><p>${S.softCobertas} de 4 competências comprovadas por integrantes.</p></div>
+          ${(C.PRINCIPIOS || []).map(p => `<div><strong>${esc(p.titulo)}</strong><p>${esc(p.texto)}</p></div>`).join('')}
         </div>
       </div>
     </div>
@@ -76,7 +74,7 @@
 
   const cards = `
   <section id="integrantes" class="block">
-    <div class="block-head" style="grid-template-columns:1fr"><div><span class="eyebrow">01 · Integrantes</span><h2 class="h2">Cinco autores, uma assinatura</h2></div></div>
+    <div class="block-head" style="grid-template-columns:1fr"><div><span class="eyebrow">01 · Integrantes</span><h2 class="h2">Quatro autores, uma assinatura</h2></div></div>
     <div class="cards">
       ${membros.map(m => m.pendente ? `
         <article class="card pend">
@@ -87,8 +85,10 @@
           <div class="card-photo">${photo(m, 'foto · integrante ' + m.n)}</div>
           <div class="card-body">
             <div class="card-top"><h3>${esc(m.nome)}</h3><b>${m.n}</b></div>
+            ${m.frase ? `<span class="card-frase">${esc(m.frase)}</span>` : ''}
             <div style="font-size:15px;line-height:1.45;color:var(--texto-2)">${esc([m.cargo, m.empresa].filter(Boolean).join(' · '))}<br><span class="muted">${esc(m.formacao)}</span></div>
-            <div class="tags">${m.skills.map(s => `<span class="tag">${esc(s)}</span>`).join('')}</div>
+            ${m.skills.length ? `<div class="tag-group"><span class="tag-lbl">Hard skills</span><div class="tags">${m.skills.map(s => `<span class="tag">${esc(s)}</span>`).join('')}</div></div>` : ''}
+            ${m.softList.length ? `<div class="tag-group"><span class="tag-lbl">Soft skills</span><div class="tags">${m.softList.map(s => `<span class="tag soft">${esc(s)}</span>`).join('')}</div></div>` : ''}
             <p class="card-contrib">${esc(m.contrib)}</p>
           </div>
         </article>`).join('')}
@@ -96,12 +96,12 @@
   </section>`;
 
   const matrix = `
-  <section id="mapa" class="block white">
+  <section id="mapa" class="block">
     <div class="block-head">
-      <div><span class="eyebrow">02 · Mapa de complementaridade</span><h2 class="h2">Nenhuma frente descoberta</h2></div>
+      <div><span class="eyebrow">03 · Mapa de complementaridade</span><h2 class="h2">Nenhuma frente descoberta</h2></div>
       <p class="lead">Cada área de conhecimento e a unidade de negócio da Argo Menthor onde ela pesa mais. Os pontos mostram quem é especialista e quem dá apoio.</p>
     </div>
-    <div class="matrix-wrap"><div class="matrix">
+    <div class="matrix-wrap"><div class="matrix" style="--n:${membros.length}">
       <div class="th">ÁREA</div>
       ${membros.map(m => `<div class="th c" title="${esc(m.nome)}">${m.n}</div>`).join('')}
       <div class="th">COBERTURA</div>
@@ -121,7 +121,7 @@
   const trips = `
   <section id="vivencias" class="block">
     <div class="block-head">
-      <div><span class="eyebrow">03 · Vivência multicultural</span><h2 class="h2">Onde aprendemos a trabalhar com quem é diferente</h2></div>
+      <div><span class="eyebrow">05 · Vivência multicultural</span><h2 class="h2">Onde aprendemos a trabalhar com quem é diferente</h2></div>
       <p class="lead">Experiências em ordem cronológica. Para uma empresa com filiais em vários países, isso significa menos ruído entre culturas e mais velocidade na integração.</p>
     </div>
     <div class="trips">
@@ -137,7 +137,7 @@
 
   const skills = `
   <section id="competencias" class="block white">
-    <div style="margin-bottom:40px"><span class="eyebrow">04 · As 4 competências</span><h2 class="h2">Soft skills com prova</h2></div>
+    <div style="margin-bottom:40px"><span class="eyebrow">06 · As 4 competências</span><h2 class="h2">Soft skills com prova</h2></div>
     <div>
       ${D.skills.map(k => `
         <div class="skill">
@@ -157,7 +157,7 @@
   const caso = D.caso ? `
   <section id="caso" class="block">
     <div class="block-head">
-      <div><span class="eyebrow">05 · Caso real em destaque</span><h2 class="h2">${esc(D.caso.titulo)}</h2></div>
+      <div><span class="eyebrow">07 · Caso real em destaque</span><h2 class="h2">${esc(D.caso.titulo)}</h2></div>
       <div style="align-self:end;display:flex;flex-direction:column;gap:6px;font-size:15px;color:var(--texto-2)">
         <span><strong style="color:var(--grafite)">${esc(D.caso.quem)}</strong>${D.caso.soft ? ' · ' + esc(D.caso.soft.label) : ''}</span>
         ${D.caso.meta ? `<span>${esc(D.caso.meta)}</span>` : ''}
@@ -168,8 +168,39 @@
     </ol>
   </section>` : `
   <section id="caso" class="block">
-    <span class="eyebrow">05 · Caso real em destaque</span><h2 class="h2">Aguardando um caso real</h2>
+    <span class="eyebrow">07 · Caso real em destaque</span><h2 class="h2">Aguardando um caso real</h2>
     <p class="lead" style="margin-top:16px">Pelo menos um integrante precisa preencher a seção "Caso real" do formulário.</p>
+  </section>`;
+
+  const equipe = `
+  <section id="competencias-equipe" class="block white">
+    <div class="block-head">
+      <div><span class="eyebrow">02 · Nossas competências</span><h2 class="h2">O que a equipe entrega junta</h2></div>
+      <p class="lead">Cinco frentes que somam as formações e as experiências dos integrantes.</p>
+    </div>
+    <div class="team-skills">
+      ${(C.COMPETENCIAS_EQUIPE || []).map((c, i) => `<div class="team-skill" style="--c:${['var(--ciano)', 'var(--laranja)', 'var(--azul)', '#D6246E', 'var(--grafite)'][i % 5]}"><strong>${esc(c.titulo)}</strong><p>${esc(c.texto)}</p></div>`).join('')}
+    </div>
+  </section>`;
+
+  const O = C.ONDE_ESTAMOS || { cidades: [] };
+  const onde = `
+  <section id="onde" class="block white">
+    <div class="block-head">
+      <div><span class="eyebrow">04 · Onde estamos</span><h2 class="h2">${esc(O.texto || '')}</h2></div>
+      <ul class="cities">${O.cidades.map((c, i) => `<li><span style="background:${['var(--laranja)', 'var(--ciano)', 'var(--azul)', '#D6246E'][i % 4]}"></span>${esc(c)}</li>`).join('')}</ul>
+    </div>
+    <img class="map" src="assets/mapa-equipe.jpg" alt="Mapa com as cidades da equipe: ${esc(O.cidades.join(', '))}" loading="lazy">
+  </section>`;
+
+  const mvv = `
+  <section id="missao" class="block white">
+    <div style="margin-bottom:40px"><span class="eyebrow">08 · Missão, visão e valores</span><h2 class="h2">Prontos para construir o próximo capítulo junto à Argo Menthor</h2></div>
+    <div class="mvv">
+      <div class="mvv-card dark"><span class="k">Missão</span><p>${esc(C.MISSAO || '')}</p></div>
+      <div class="mvv-card tint"><span class="k">Visão</span><p>${esc(C.VISAO || '')}</p></div>
+      <div class="mvv-card"><span class="k">Valores</span><ul>${(C.VALORES || []).map((v, i) => `<li><span style="background:${['var(--ciano)', 'var(--azul)', '#D6246E', 'var(--laranja)'][i % 4]}"></span>${esc(v)}</li>`).join('')}</ul></div>
+    </div>
   </section>`;
 
   const closing = `
@@ -186,13 +217,13 @@
   <nav class="nav">
     ${logo()}
     <div class="nav-links">
-      <a href="#integrantes">Integrantes</a><a href="#mapa">Complementaridade</a><a href="#vivencias">Vivências</a>
-      <a href="#competencias">Competências</a><a href="#caso">Caso real</a>
+      <a href="#integrantes">Integrantes</a><a href="#competencias-equipe">Competências</a><a href="#onde">Onde estamos</a><a href="#vivencias">Vivências</a>
+      <a href="#competencias">Soft skills</a><a href="#caso">Caso real</a><a href="#missao">Missão</a>
       <a class="acc" href="pdf.html${demo && C.API_URL ? '?demo' : ''}">Versão PDF ↗</a>
     </div>
   </nav>`;
 
-  document.getElementById('app').innerHTML = status + nav + cover + manifesto + cards + matrix + trips + skills + caso + closing;
+  document.getElementById('app').innerHTML = status + nav + cover + manifesto + cards + equipe + matrix + onde + trips + skills + caso + mvv + closing;
 })();
 </script>
 </body>

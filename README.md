@@ -53,4 +53,4 @@ Dica: dá para mandar um link já com o nome selecionado, ex.: `formulario.html?
 - Reenviar o formulário substitui a resposta anterior da mesma pessoa (o histórico fica na planilha). Ao escolher o nome, o formulário recarrega as respostas anteriores.
 - Os limites de caracteres foram calibrados para o pior caso (todos os campos no máximo) caber em capa + 5 páginas com corpo 16 pt.
 - Regra da entrega (página web): mesmas especificações do texto escrito (2 a 5 laudas sem capa e referências), fonte 16. Inclua a declaração de participação (já está no fim do portfólio).
-- O formulário é público para quem tiver o link, mas o script só aceita os 5 nomes da equipe.
+- O formulário é público para quem tiver o link, mas o script só aceita os 4 nomes da equipe.
