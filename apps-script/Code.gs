@@ -64,7 +64,9 @@ function doPost(e) {
 }
 
 // Devolve a resposta mais recente de cada integrante.
-function doGet() {
+// ?action=foto&id=... devolve a foto em base64 (usado pelo botão "Baixar PDF").
+function doGet(e) {
+  if (e && e.parameter && e.parameter.action === 'foto') return foto_(String(e.parameter.id || ''));
   try {
     const dataRange = getSheet_().getDataRange();
     const values = dataRange.getValues();
@@ -85,6 +87,19 @@ function doGet() {
       return m;
     });
     return json_({ ok: true, membros: membros });
+  } catch (err) {
+    return json_({ ok: false, error: String(err.message || err) });
+  }
+}
+
+// Só entrega arquivos que estão registrados como foto na planilha.
+function foto_(id) {
+  try {
+    const iFoto = FIELDS.indexOf('foto_id');
+    const ids = getSheet_().getDataRange().getValues().slice(1).map(function (r) { return String(r[iFoto]); });
+    if (!id || ids.indexOf(id) === -1) throw new Error('Foto não encontrada');
+    const blob = DriveApp.getFileById(id).getBlob();
+    return json_({ ok: true, data: 'data:' + blob.getContentType() + ';base64,' + Utilities.base64Encode(blob.getBytes()) });
   } catch (err) {
     return json_({ ok: false, error: String(err.message || err) });
   }

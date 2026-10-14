@@ -18,6 +18,11 @@
 
   .bar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; padding: 12px 20px; background: var(--g); color: #fff; font: 14px/1.4 Arial, sans-serif; }
   .bar button { border: 0; border-radius: 8px; padding: 10px 18px; background: var(--a); color: #fff; font: 700 15px Arial, sans-serif; cursor: pointer; }
+  .bar button.sec { background: transparent; border: 1.5px solid #fff; }
+  .bar button[disabled] { opacity: .6; cursor: wait; }
+  /* Durante a geração do PDF: sem contorno de aviso nem sombra */
+  body.capturando .page { outline: none !important; box-shadow: none; }
+  body.capturando .page.over::after { display: none; }
   .bar a { color: #fff; }
   .bar .w { color: #F8B26A; font-weight: 700; }
   .bar .ok { color: #9FE0A8; font-weight: 700; }
@@ -79,7 +84,7 @@
   .mx .av { width: 8mm; height: 8mm; border-radius: 50%; overflow: hidden; border: .9pt solid var(--c); }
   .mx .av img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .d2 { width: 3.8mm; height: 3.8mm; border-radius: 50%; background: var(--a); }
-  .d1 { width: 3.8mm; height: 3.8mm; border-radius: 50%; border: .9pt solid var(--a); background: repeating-linear-gradient(135deg, var(--a) 0 .5mm, #fff .5mm 1.3mm); }
+  .d1 { width: 3.8mm; height: 3.8mm; border-radius: 50%; border: .9pt solid var(--a); background: linear-gradient(90deg, var(--a) 0 50%, #fff 50% 100%); }
   .d0 { width: 1mm; height: 1mm; border-radius: 50%; background: var(--l); }
 
   /* Competências e vivências */
@@ -126,8 +131,9 @@
 </head>
 <body>
 <div class="bar">
-  <button type="button" onclick="window.print()">Exportar PDF</button>
-  <span>Na janela de impressão: <b>Destino: Salvar como PDF</b> · <b>Margens: Nenhuma</b> · ative <b>Gráficos de fundo</b>.</span>
+  <button type="button" id="baixar">Baixar PDF</button>
+  <button type="button" class="sec" onclick="window.print()" title="Na janela de impressão: Margens Nenhuma, sem cabeçalhos e rodapés, com gráficos de fundo">Imprimir</button>
+  <span>Baixar PDF gera o arquivo igual à tela, sem margens nem cabeçalho do navegador.</span>
   <span id="check">Verificando páginas…</span>
   <a href="index.html">← Portfólio web</a>
 </div>
@@ -259,6 +265,49 @@
       : 'Capa + 5 páginas, todas dentro do limite ✓');
   }
   check();
+
+  // ---------- Baixar PDF: cada folha A4 vira uma página, exatamente como na tela ----------
+  const loadScript = src => new Promise((ok, fail) => { const sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = () => fail(new Error('Não foi possível carregar ' + src)); document.head.appendChild(sc); });
+  // Fotos do Google Drive não podem ser capturadas direto (outro domínio): pedimos ao backend em base64.
+  async function fotosLocais() {
+    const imgs = [...document.querySelectorAll('#pages img')].filter(im => /drive\.google\.com\/thumbnail/.test(im.src));
+    const cache = {};
+    await Promise.all(imgs.map(async im => {
+      const id = new URL(im.src).searchParams.get('id');
+      try {
+        cache[id] = cache[id] || fetch(C.API_URL + '?action=foto&id=' + encodeURIComponent(id)).then(r => r.json());
+        const r = await cache[id];
+        if (r.ok) await new Promise(ok => { im.onload = im.onerror = ok; im.src = r.data; });
+      } catch (e) { /* mantém a imagem original */ }
+    }));
+  }
+  document.getElementById('baixar').addEventListener('click', async e => {
+    const btn = e.currentTarget, el = document.getElementById('check'), antes = el.textContent;
+    btn.disabled = true; btn.textContent = 'Gerando…';
+    try {
+      if (!window.html2canvas) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      if (!window.jspdf) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      el.textContent = 'Preparando fotos…';
+      await fotosLocais();
+      document.body.classList.add('capturando');
+      const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
+      const pages = [...document.querySelectorAll('.page')];
+      for (let i = 0; i < pages.length; i++) {
+        el.textContent = `Gerando página ${i + 1} de ${pages.length}…`;
+        const canvas = await window.html2canvas(pages[i], { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false });
+        if (i) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
+      }
+      pdf.setProperties({ title: titulo, author: 'Equipe AUTH' });
+      pdf.save('Portfolio_Equipe_AUTH.pdf');
+      el.textContent = antes;
+    } catch (err) {
+      el.className = 'w'; el.textContent = 'Erro ao gerar o PDF: ' + (err.message || err) + ' — use Imprimir.';
+    } finally {
+      document.body.classList.remove('capturando');
+      btn.disabled = false; btn.textContent = 'Baixar PDF';
+    }
+  });
 })();
 </script>
 </body>
