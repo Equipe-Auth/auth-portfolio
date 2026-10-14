@@ -12,7 +12,7 @@
 <style>
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
-  :root { --g: #0A192F; --m: #4A5568; --l: #E2E8F0; --v: #0091B0; --a: #2563EB; --t: #E06C00; --ci: #00B4D8; --la: #F77E00; --d: Montserrat, Arial, sans-serif; }
+  :root { --g: #0A192F; --m: #4A5568; --l: #E2E8F0; --v: #0091B0; --a: #2563EB; --t: #E06C00; --ci: #00B4D8; --la: #F77E00; --d: Arial, Helvetica, sans-serif; }
   html, body { margin: 0; }
   body { background: #E6EAF0; color: var(--g); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
@@ -23,7 +23,7 @@
   .bar .ok { color: #9FD6BF; font-weight: 700; }
 
   .pages { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 24px 0 48px; }
-  .page { width: 210mm; height: 297mm; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(10,25,47,.15); padding: 14mm 18mm 10mm; display: flex; flex-direction: column; font: 16pt/1.5 Arial, Helvetica, sans-serif; color: var(--g); position: relative; }
+  .page { width: 210mm; height: 297mm; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(10,25,47,.15); padding: 20mm 22mm 14mm; display: flex; flex-direction: column; font: 12pt/1.5 Arial, Helvetica, sans-serif; color: var(--g); position: relative; }
   .page.over { outline: 3px solid var(--t); }
   .page.over::after { content: 'Conteúdo excede a página — reduza os textos'; position: absolute; top: 4mm; right: 4mm; background: var(--t); color: #fff; font: 700 9pt Arial; padding: 1mm 3mm; border-radius: 2mm; }
   .body { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
@@ -36,52 +36,52 @@
     .page.over::after { display: none; }
   }
 
-  .logo { display: inline-flex; align-items: center; gap: .3em; font: 700 14pt/1 var(--d); letter-spacing: .02em; }
+  .logo { display: inline-flex; align-items: center; gap: .3em; font: 700 14pt/1.5 var(--d); letter-spacing: .02em; }
   .logo img { height: 1.5em; width: auto; }
   .sig { display: block; width: 26mm; height: 1.2mm; border-radius: .6mm; background: linear-gradient(90deg, var(--ci) 0 62%, transparent 62% 70%, var(--la) 70% 100%); }
   .ph-top { display: flex; justify-content: space-between; align-items: baseline; border-bottom: .75pt solid var(--l); padding-bottom: 2mm; margin-bottom: 6mm; flex: none; }
-  .ph-top span.s { font-size: 10pt; color: var(--m); }
-  .foot { flex: none; display: flex; justify-content: space-between; font-size: 9pt; color: var(--m); padding-top: 3mm; }
-  h2 { margin: 0 0 2mm; font: 600 19pt/1.25 var(--d); color: var(--g); }
+  .ph-top span.s { font-size: 12pt; color: var(--m); }
+  .foot { flex: none; display: flex; justify-content: space-between; gap: 6mm; font-size: 12pt; color: var(--m); padding-top: 3mm; }
+  h2 { margin: 0 0 2mm; font: 700 14pt/1.5 var(--d); color: var(--g); }
   p { margin: 0; }
 
-  .mem { display: grid; grid-template-columns: 25mm 1fr; gap: 5mm; padding-top: 3.5mm; border-top: .75pt solid var(--l); }
+  .mem { display: grid; grid-template-columns: 28mm 1fr; gap: 6mm; padding-top: 3.5mm; border-top: .75pt solid var(--l); }
   .mem + .mem { margin-top: 4mm; }
-  .mem .pic { height: 31mm; border: .75pt solid var(--l); border-radius: 2.5mm; overflow: hidden; }
+  .mem .pic { height: 35mm; border: .75pt solid var(--l); border-radius: 2.5mm; overflow: hidden; }
   .mem .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .ph { background: repeating-linear-gradient(135deg, #F1F4F8 0 2mm, #fff 2mm 4mm); display: flex; align-items: center; justify-content: center; font: 8pt ui-monospace, Menlo, monospace; color: var(--m); text-align: center; }
-  .mem .nm { font: 600 15pt/1.4 var(--d); }
+  .ph { background: repeating-linear-gradient(135deg, #F1F4F8 0 2mm, #fff 2mm 4mm); display: flex; align-items: center; justify-content: center; font: 12pt/1.5 Arial, sans-serif; color: var(--m); text-align: center; }
+  .mem .nm { font: 700 13pt/1.5 var(--d); }
   .mem .nm b { color: var(--v); }
-  .meta { font-size: 12pt; line-height: 1.35; color: #3A3E46; }
+  .meta { font-size: 12pt; line-height: 1.5; color: #3A3E46; }
   .tags { margin: 1.2mm 0; display: flex; flex-wrap: wrap; gap: 1.2mm; }
-  .tags span { padding: 0 2.5mm; border: .75pt solid #E6F8FB; border-radius: 3mm; background: #E6F8FB; color: #006F87; font-size: 11pt; line-height: 1.45; }
+  .tags span { padding: 0 2.5mm; border: .75pt solid #E6F8FB; border-radius: 3mm; background: #E6F8FB; color: #006F87; font-size: 12pt; line-height: 1.5; }
 
-  .mx { display: grid; grid-template-columns: 1fr repeat(var(--n, 5), 12mm); font-size: 11pt; line-height: 1.3; }
-  .mx > span { border-bottom: .5pt solid var(--l); padding: 1.1mm 0; display: flex; align-items: center; }
+  .mx { display: grid; grid-template-columns: 1fr repeat(var(--n, 5), 12mm); font-size: 12pt; line-height: 1.5; }
+  .mx > span { border-bottom: .5pt solid var(--l); padding: .4mm 0; display: flex; align-items: center; }
   .mx > span.h { border-bottom: 1pt solid var(--g); font-weight: 700; color: var(--m); }
   .mx > span.c { justify-content: center; }
-  .mx > span.h.c { font: 700 11pt var(--d); color: var(--g); }
+  .mx > span.h.c { font: 700 12pt/1.5 var(--d); color: var(--g); }
   .d2 { width: 3.6mm; height: 3.6mm; border-radius: 50%; background: var(--v); }
   .d1 { width: 3.6mm; height: 3.6mm; border-radius: 50%; border: .9pt solid var(--v); }
   .d0 { width: 1mm; height: 1mm; border-radius: 50%; background: #B8B3A8; }
   .trip { padding: 1mm 0 1mm 5mm; border-left: 1.5pt solid var(--c); }
   .trip + .trip { margin-top: 2mm; }
-  .trip .k { font-size: 12pt; line-height: 1.4; font-weight: 700; color: var(--c); }
+  .trip .k { font-size: 12pt; line-height: 1.5; font-weight: 700; color: var(--c); }
 
   .sk { border-top: .75pt solid var(--l); padding-top: 2.5mm; }
   .sk + .sk { margin-top: 4mm; }
-  .sk .t { display: flex; align-items: center; gap: 3mm; font: 700 16pt/1.5 var(--d); }
+  .sk .t { display: flex; align-items: center; gap: 3mm; font: 700 12pt/1.5 var(--d); }
   .sk .t i { flex: none; width: 3.5mm; height: 3.5mm; }
   .sk p { margin-top: 1mm; padding-left: 6.5mm; }
   .sk p strong { font-size: 12pt; }
 
   .step { display: grid; grid-template-columns: 26mm 1fr; gap: 4mm; align-items: baseline; }
   .step + .step { margin-top: 2.5mm; }
-  .step b { font: 700 12pt var(--d); }
-  .frase { font: 600 10pt/1.4 var(--d); letter-spacing: .05em; text-transform: uppercase; color: var(--v); }
+  .step b { font: 700 12pt/1.5 var(--d); }
+  .frase { font: 700 12pt/1.5 var(--d); color: var(--v); }
   .tags span.soft { background: #FFF3E6; border-color: #FFF3E6; color: #A34E00; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; font-size: 12pt; line-height: 1.35; }
-  .grid2 strong { font: 600 12pt var(--d); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; font-size: 12pt; line-height: 1.5; }
+  .grid2 strong { font: 700 12pt/1.5 var(--d); }
 </style>
 </head>
 <body>
@@ -126,13 +126,13 @@
 
   const cover = `
     <section class="page" style="padding:22mm 20mm 16mm">
-      <div style="display:flex;justify-content:space-between;font-size:10pt;color:var(--m)"><span>MBA Online FGV · ${esc(C.DISCIPLINA)}</span><span>${esc(C.DATA)}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12pt;color:var(--m)"><span>MBA Online FGV · ${esc(C.DISCIPLINA)}</span><span>${esc(C.DATA)}</span></div>
       <div style="margin-top:14mm"><span class="sig"></span></div>
       <div style="margin-top:22mm"><img src="assets/logo-auth.png" alt="AUTH" style="width:70mm;height:auto;display:block"></div>
       <div style="margin-top:4mm;font-size:12pt;color:var(--m)">${esc(C.SLOGAN || '')}</div>
-      <h1 style="margin:14mm 0 0;font:600 26pt/1.18 var(--d);letter-spacing:-0.02em;max-width:150mm">${titulo}</h1>
+      <h1 style="margin:14mm 0 0;font:700 24pt/1.5 var(--d);max-width:160mm">${titulo}</h1>
       <div style="margin-top:auto;border-top:1.5pt solid var(--g);padding-top:5mm">
-        <div style="font:700 10pt var(--d);letter-spacing:.08em;color:var(--v)">INTEGRANTES</div>
+        <div style="font:700 12pt/1.5 var(--d);color:var(--v)">Integrantes</div>
         <ol style="margin:2mm 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;column-gap:10mm">
           ${membros.map(m => `<li><strong style="font-family:var(--d);color:var(--v)">${m.n}</strong>  ${esc(m.nome)}</li>`).join('')}
         </ol>
@@ -157,7 +157,7 @@
       <span class="h">Área · unidade Argo Menthor</span>${membros.map(m => `<span class="h c">${m.n}</span>`).join('')}
       ${D.matrix.map(r => `<span><span><strong>${esc(r.area)}</strong> <span style="color:var(--m)">· ${esc(r.bu)}</span></span></span>${r.cells.map(c => `<span class="c"><span class="d${c}"></span></span>`).join('')}`).join('')}
     </div>
-    <div style="margin:1.5mm 0 4mm;font-size:10pt;color:var(--m)">● especialista   ○ apoio   · sem atuação   —   ${membros.map(m => `${m.n} ${esc(m.nome.split(' ')[0])}`).join(' · ')}</div>
+    <div style="margin:1.5mm 0 4mm;font-size:12pt;color:var(--m)">● especialista   ○ apoio   · sem atuação   —   ${membros.map(m => `${m.n} ${esc(m.nome.split(' ')[0])}`).join(' · ')}</div>
     <h2>Vivência multicultural</h2>
     ${D.trips.length ? D.trips.map(t => `
       <div class="trip" style="--c:${t.intl ? 'var(--a)' : 'var(--v)'}">
@@ -180,10 +180,10 @@
       ${c.passos.map((p, i, a) => `<div class="step"><b style="color:${i === a.length - 1 ? 'var(--v)' : 'var(--g)'}">${String(i + 1).padStart(2, '0')} ${p[0]}</b><span>${esc(p[1])}</span></div>`).join('')}`
       : '<p style="margin:2mm 0;color:var(--t)">[Aguardando um caso real]</p>'}
     <h2 style="margin-top:6mm">Missão, visão e valores</h2>
-    <p style="font-size:12pt;line-height:1.4"><strong style="font-family:var(--d)">Missão.</strong> ${esc(C.MISSAO || '')}</p>
-    <p style="margin-top:1.5mm;font-size:12pt;line-height:1.4"><strong style="font-family:var(--d)">Visão.</strong> ${esc(C.VISAO || '')}</p>
-    <p style="margin-top:1.5mm;font-size:12pt;line-height:1.4"><strong style="font-family:var(--d)">Valores.</strong> ${esc((C.VALORES || []).join(' · '))}</p>
-    <p style="margin:6mm 0 0;font:600 22pt/1.15 var(--d);letter-spacing:-0.02em">${esc(C.FRASE_FINAL)}<span style="color:var(--v)">.</span></p>
+    <p style="font-size:12pt;line-height:1.5"><strong style="font-family:var(--d)">Missão.</strong> ${esc(C.MISSAO || '')}</p>
+    <p style="margin-top:1.5mm;font-size:12pt;line-height:1.5"><strong style="font-family:var(--d)">Visão.</strong> ${esc(C.VISAO || '')}</p>
+    <p style="margin-top:1.5mm;font-size:12pt;line-height:1.5"><strong style="font-family:var(--d)">Valores.</strong> ${esc((C.VALORES || []).join(' · '))}</p>
+    <p style="margin:6mm 0 0;font:700 18pt/1.5 var(--d)">${esc(C.FRASE_FINAL)}<span style="color:var(--v)">.</span></p>
     <div style="margin-top:5mm;padding:4mm 5mm;border:1pt solid var(--g)">
       <p>A equipe AUTH informa que os integrantes a seguir colaboraram efetivamente na realização do desafio:</p>
       <p style="margin-top:2mm;font-weight:700">${C.INTEGRANTES.map(esc).join(' · ')}</p>

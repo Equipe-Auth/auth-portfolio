@@ -12,7 +12,7 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--papel); color: var(--grafite); font: 16px/1.5 Calibri, Carlito, 'Segoe UI', Arial, sans-serif; }
+body { margin: 0; background: var(--papel); color: var(--grafite); font: 16px/1.5 Arial, Helvetica, sans-serif; }
 a { color: var(--verde); }
 a:hover { color: var(--grafite); }
 img { max-width: 100%; }

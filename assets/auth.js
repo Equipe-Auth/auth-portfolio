@@ -9,7 +9,7 @@
     { id: 'sto', label: 'Storytelling', cor: '#D6246E', tint: '#FCE8F1', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
   ];
 
-  // Limites calibrados para o PDF caber em 5 páginas com corpo 16 pt.
+  // Limites calibrados para o PDF caber em capa + 5 laudas (Arial 12, espaçamento 1,5).
   const LIMITS = {
     cargo: 40, empresa: 40, formacao: 60, skill: 25, contrib: 200,
     cult_local: 35, cult_periodo: 12, cultural: 120, exemplo: 200,
