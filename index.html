@@ -6,9 +6,9 @@
 <title>Portfólio da Equipe AUTH</title>
 <meta name="description" content="Portfólio da Equipe AUTH – Processo Seletivo Argo Menthor · MBA Online FGV">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D2026'/%3E%3Crect x='19' y='19' width='7' height='7' fill='%232F7A5F'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/logo-a.png">
 <script src="config.js"></script>
 <script src="assets/auth.js"></script>
 </head>
@@ -60,7 +60,7 @@
     <div class="manifesto">
       <div>
         <span class="eyebrow">Quem somos</span>
-        <div style="margin-top:20px"><span class="logo" style="font-size:64px">AUTH<span class="logo-dot"></span></span></div>
+        <div style="margin-top:20px"><img class="logo-full" src="assets/logo-auth.png" alt="AUTH"></div>
         <p class="muted" style="margin:12px 0 0;font-size:15px">de autoria · autenticidade · autoridade</p>
       </div>
       <div class="wide">
@@ -147,7 +147,7 @@
             <p class="lead" style="font-size:15px">${esc(k.def)}</p>
           </div>
           <div class="skill-ev">
-            ${k.ev.length ? k.ev.map(v => `<figure style="background:${k.tint}"><blockquote>${esc(v.txt)}</blockquote><figcaption>${esc(v.quem)}</figcaption></figure>`).join('')
+            ${k.ev.length ? k.ev.map(v => `<figure style="background:${k.tint};--c:${k.cor}"><blockquote>${esc(v.txt)}</blockquote><figcaption>${esc(v.quem)}</figcaption></figure>`).join('')
               : `<figure class="empty"><blockquote>Ainda sem evidência. Alguém da equipe precisa escolher esta competência no formulário.</blockquote></figure>`}
           </div>
         </div>`).join('')}

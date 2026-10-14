@@ -3,10 +3,10 @@
   const C = window.AUTH_CONFIG;
 
   const SOFT = [
-    { id: 'com', label: 'Relacionamento interpessoal e comunicação', cor: '#3C67A3', tint: '#E4EAF3', def: 'Construir confiança e alinhar públicos diferentes, das filiais à diretoria.' },
-    { id: 'res', label: 'Resiliência', cor: '#B65A3C', tint: '#F5E5DE', def: 'Manter qualidade e ritmo quando o cenário muda no meio do caminho.' },
-    { id: 'pla', label: 'Planejamento e organização', cor: '#2F7A5F', tint: '#E3EFE9', def: 'Transformar objetivos em etapas, responsáveis e prazos realistas.' },
-    { id: 'sto', label: 'Storytelling', cor: '#1D2026', tint: '#ECE9E2', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
+    { id: 'com', label: 'Relacionamento interpessoal e comunicação', cor: '#0091B0', tint: '#E6F8FB', def: 'Construir confiança e alinhar públicos diferentes, das filiais à diretoria.' },
+    { id: 'res', label: 'Resiliência', cor: '#E06C00', tint: '#FFF3E6', def: 'Manter qualidade e ritmo quando o cenário muda no meio do caminho.' },
+    { id: 'pla', label: 'Planejamento e organização', cor: '#2563EB', tint: '#EAF0FD', def: 'Transformar objetivos em etapas, responsáveis e prazos realistas.' },
+    { id: 'sto', label: 'Storytelling', cor: '#D6246E', tint: '#FCE8F1', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
   ];
 
   // Limites calibrados para o PDF caber em 5 páginas com corpo 16 pt.
@@ -21,7 +21,7 @@
   const num = i => String(i + 1).padStart(2, '0');
   const fotoUrl = id => (id ? 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w800' : '');
   const softById = id => SOFT.find(s => s.id === id);
-  const logo = (cls = '') => `<span class="logo ${cls}">AUTH<span class="logo-dot"></span></span>`;
+  const logo = (cls = '') => `<span class="logo ${cls}"><img src="assets/logo-a.png" alt="">AUTH</span>`;
   const isDemo = () => !C.API_URL || new URLSearchParams(location.search).has('demo');
 
   function normalize(r, i) {

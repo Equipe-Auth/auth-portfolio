@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Portfólio AUTH · PDF</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D2026'/%3E%3Crect x='19' y='19' width='7' height='7' fill='%232F7A5F'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/logo-a.png">
 <script src="config.js"></script>
 <script src="assets/auth.js"></script>
 <style>
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
-  :root { --g: #1D2026; --m: #5A5E66; --l: #D8D4CB; --v: #2F7A5F; --a: #3C67A3; --t: #B65A3C; --d: Archivo, Arial, sans-serif; }
+  :root { --g: #0A192F; --m: #4A5568; --l: #E2E8F0; --v: #0091B0; --a: #2563EB; --t: #E06C00; --ci: #00B4D8; --la: #F77E00; --d: Montserrat, Arial, sans-serif; }
   html, body { margin: 0; }
-  body { background: #E9E6DF; color: var(--g); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #E6EAF0; color: var(--g); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
   .bar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; padding: 12px 20px; background: var(--g); color: #fff; font: 14px/1.4 Arial, sans-serif; }
   .bar button { border: 0; border-radius: 8px; padding: 10px 18px; background: var(--v); color: #fff; font: 700 15px var(--d); cursor: pointer; }
@@ -23,7 +23,7 @@
   .bar .ok { color: #9FD6BF; font-weight: 700; }
 
   .pages { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 24px 0 48px; }
-  .page { width: 210mm; height: 297mm; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(29,32,38,.15); padding: 14mm 18mm 10mm; display: flex; flex-direction: column; font: 16pt/1.5 Arial, Helvetica, sans-serif; position: relative; }
+  .page { width: 210mm; height: 297mm; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(10,25,47,.15); padding: 14mm 18mm 10mm; display: flex; flex-direction: column; font: 16pt/1.5 Arial, Helvetica, sans-serif; color: var(--g); position: relative; }
   .page.over { outline: 3px solid var(--t); }
   .page.over::after { content: 'Conteúdo excede a página — reduza os textos'; position: absolute; top: 4mm; right: 4mm; background: var(--t); color: #fff; font: 700 9pt Arial; padding: 1mm 3mm; border-radius: 2mm; }
   .body { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
@@ -36,30 +36,31 @@
     .page.over::after { display: none; }
   }
 
-  .logo { display: inline-flex; align-items: baseline; font: 800 14pt/1 var(--d); letter-spacing: -0.04em; }
-  .logo i { display: inline-block; width: .2em; height: .2em; background: var(--v); margin-left: .06em; }
+  .logo { display: inline-flex; align-items: center; gap: .3em; font: 700 14pt/1 var(--d); letter-spacing: .02em; }
+  .logo img { height: 1.5em; width: auto; }
+  .sig { display: block; width: 26mm; height: 1.2mm; border-radius: .6mm; background: linear-gradient(90deg, var(--ci) 0 62%, transparent 62% 70%, var(--la) 70% 100%); }
   .ph-top { display: flex; justify-content: space-between; align-items: baseline; border-bottom: .75pt solid var(--l); padding-bottom: 2mm; margin-bottom: 6mm; flex: none; }
   .ph-top span.s { font-size: 10pt; color: var(--m); }
   .foot { flex: none; display: flex; justify-content: space-between; font-size: 9pt; color: var(--m); padding-top: 3mm; }
-  h2 { margin: 0 0 2mm; font: 700 20pt/1.2 var(--d); }
+  h2 { margin: 0 0 2mm; font: 600 19pt/1.25 var(--d); color: var(--g); }
   p { margin: 0; }
 
   .mem { display: grid; grid-template-columns: 28mm 1fr; gap: 6mm; padding-top: 3.5mm; border-top: .75pt solid var(--l); }
   .mem + .mem { margin-top: 4mm; }
-  .mem .pic { height: 35mm; border: .75pt solid var(--l); overflow: hidden; }
+  .mem .pic { height: 35mm; border: .75pt solid var(--l); border-radius: 2.5mm; overflow: hidden; }
   .mem .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .ph { background: repeating-linear-gradient(135deg, #ECE9E2 0 2mm, #fff 2mm 4mm); display: flex; align-items: center; justify-content: center; font: 8pt ui-monospace, Menlo, monospace; color: var(--m); text-align: center; }
-  .mem .nm { font: 700 16pt/1.4 var(--d); }
+  .ph { background: repeating-linear-gradient(135deg, #F1F4F8 0 2mm, #fff 2mm 4mm); display: flex; align-items: center; justify-content: center; font: 8pt ui-monospace, Menlo, monospace; color: var(--m); text-align: center; }
+  .mem .nm { font: 600 15pt/1.4 var(--d); }
   .mem .nm b { color: var(--v); }
   .meta { font-size: 12pt; line-height: 1.35; color: #3A3E46; }
   .tags { margin: 1.5mm 0; display: flex; flex-wrap: wrap; gap: 1.5mm; }
-  .tags span { padding: 0 2.5mm; border: .75pt solid var(--g); border-radius: 3mm; font-size: 11pt; line-height: 1.6; }
+  .tags span { padding: 0 2.5mm; border: .75pt solid #E6F8FB; border-radius: 3mm; background: #E6F8FB; color: #006F87; font-size: 11pt; line-height: 1.6; }
 
   .mx { display: grid; grid-template-columns: 1fr repeat(5, 12mm); font-size: 11pt; line-height: 1.3; }
   .mx > span { border-bottom: .5pt solid var(--l); padding: 1.1mm 0; display: flex; align-items: center; }
   .mx > span.h { border-bottom: 1pt solid var(--g); font-weight: 700; color: var(--m); }
   .mx > span.c { justify-content: center; }
-  .mx > span.h.c { font: 800 11pt var(--d); color: var(--g); }
+  .mx > span.h.c { font: 700 11pt var(--d); color: var(--g); }
   .d2 { width: 3.6mm; height: 3.6mm; border-radius: 50%; background: var(--v); }
   .d1 { width: 3.6mm; height: 3.6mm; border-radius: 50%; border: .9pt solid var(--v); }
   .d0 { width: 1mm; height: 1mm; border-radius: 50%; background: #B8B3A8; }
@@ -76,7 +77,7 @@
 
   .step { display: grid; grid-template-columns: 26mm 1fr; gap: 4mm; align-items: baseline; }
   .step + .step { margin-top: 2.5mm; }
-  .step b { font: 800 13pt var(--d); }
+  .step b { font: 700 12pt var(--d); }
 </style>
 </head>
 <body>
@@ -96,7 +97,7 @@
   const TOTAL = 5;
   const titulo = 'Portfólio da Equipe AUTH – Processo Seletivo Argo Menthor';
   const short = n => { const w = String(n).split(' '); return w.length > 2 ? w[0] + ' ' + w[w.length - 1] : n; };
-  const logo = s => `<span class="logo"${s ? ` style="font-size:${s}"` : ''}>AUTH<i></i></span>`;
+  const logo = s => `<span class="logo"${s ? ` style="font-size:${s}"` : ''}><img src="assets/logo-a.png" alt="">AUTH</span>`;
 
   const page = (i, label, html) => `
     <section class="page">
@@ -121,16 +122,17 @@
   const cover = `
     <section class="page" style="padding:22mm 20mm 16mm">
       <div style="display:flex;justify-content:space-between;font-size:10pt;color:var(--m)"><span>MBA Online FGV · ${esc(C.DISCIPLINA)}</span><span>${esc(C.DATA)}</span></div>
-      <div style="margin-top:46mm">${logo('72pt')}</div>
+      <div style="margin-top:14mm"><span class="sig"></span></div>
+      <div style="margin-top:22mm"><img src="assets/logo-auth.png" alt="AUTH" style="width:70mm;height:auto;display:block"></div>
       <div style="margin-top:4mm;font-size:12pt;color:var(--m)">de autoria · autenticidade · autoridade</div>
-      <h1 style="margin:18mm 0 0;font:700 28pt/1.12 var(--d);letter-spacing:-0.02em;max-width:150mm">${titulo}</h1>
+      <h1 style="margin:14mm 0 0;font:600 26pt/1.18 var(--d);letter-spacing:-0.02em;max-width:150mm">${titulo}</h1>
       <div style="margin-top:auto;border-top:1.5pt solid var(--g);padding-top:5mm">
         <div style="font:700 10pt var(--d);letter-spacing:.08em;color:var(--v)">INTEGRANTES</div>
         <ol style="margin:2mm 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;column-gap:10mm">
           ${membros.map(m => `<li><strong style="font-family:var(--d);color:var(--v)">${m.n}</strong>  ${esc(m.nome)}</li>`).join('')}
         </ol>
       </div>
-      <div style="margin-top:8mm;display:flex;gap:1.5mm;height:2mm"><span style="flex:1;background:var(--a)"></span><span style="flex:1;background:var(--t)"></span><span style="flex:1;background:var(--v)"></span><span style="flex:1;background:var(--g)"></span></div>
+      <div style="margin-top:8mm;display:flex;gap:2mm;height:1.5mm"><span style="flex:3;border-radius:1mm;background:var(--ci)"></span><span style="flex:1.2;border-radius:1mm;background:var(--la)"></span></div>
     </section>`;
 
   const p1 = page(1, 'Quem somos · Integrantes', `
@@ -169,7 +171,7 @@
       <div style="margin:1mm 0 4mm;font-size:12pt;color:var(--m)">${esc(c.titulo)} · ${esc(c.quem)}${c.soft ? ' · ' + esc(c.soft.label) : ''}${c.meta ? ' · ' + esc(c.meta) : ''}</div>
       ${c.passos.map((p, i, a) => `<div class="step"><b style="color:${i === a.length - 1 ? 'var(--v)' : 'var(--g)'}">${String(i + 1).padStart(2, '0')} ${p[0]}</b><span>${esc(p[1])}</span></div>`).join('')}`
       : '<p style="margin:2mm 0;color:var(--t)">[Aguardando um caso real]</p>'}
-    <p style="margin:6mm 0 0;font:800 24pt/1.1 var(--d);letter-spacing:-0.03em">${esc(C.FRASE_FINAL)}<span style="color:var(--v)">.</span></p>
+    <p style="margin:6mm 0 0;font:600 22pt/1.15 var(--d);letter-spacing:-0.02em">${esc(C.FRASE_FINAL)}<span style="color:var(--v)">.</span></p>
     <div style="margin-top:5mm;padding:4mm 5mm;border:1pt solid var(--g)">
       <p>A equipe AUTH informa que os integrantes a seguir colaboraram efetivamente na realização do desafio:</p>
       <p style="margin-top:2mm;font-weight:700">${C.INTEGRANTES.map(esc).join(' · ')}</p>
