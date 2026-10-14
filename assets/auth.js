@@ -3,10 +3,10 @@
   const C = window.AUTH_CONFIG;
 
   const SOFT = [
-    { id: 'com', label: 'Relacionamento interpessoal e comunicação', cor: '#0091B0', tint: '#E6F8FB', def: 'Construir confiança e alinhar públicos diferentes, das filiais à diretoria.' },
-    { id: 'res', label: 'Resiliência', cor: '#E06C00', tint: '#FFF3E6', def: 'Manter qualidade e ritmo quando o cenário muda no meio do caminho.' },
-    { id: 'pla', label: 'Planejamento e organização', cor: '#2563EB', tint: '#EAF0FD', def: 'Transformar objetivos em etapas, responsáveis e prazos realistas.' },
-    { id: 'sto', label: 'Storytelling', cor: '#D6246E', tint: '#FCE8F1', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
+    { id: 'com', label: 'Relacionamento interpessoal e comunicação', cor: '#3C67A3', tint: '#E4EAF3', def: 'Construir confiança e alinhar públicos diferentes, das filiais à diretoria.' },
+    { id: 'res', label: 'Resiliência', cor: '#B65A3C', tint: '#F5E5DE', def: 'Manter qualidade e ritmo quando o cenário muda no meio do caminho.' },
+    { id: 'pla', label: 'Planejamento e organização', cor: '#2F7A5F', tint: '#E3EFE9', def: 'Transformar objetivos em etapas, responsáveis e prazos realistas.' },
+    { id: 'sto', label: 'Storytelling', cor: '#1D2026', tint: '#ECE9E2', def: 'Contar dados e decisões de forma que as pessoas lembrem e ajam.' }
   ];
 
   // Limites calibrados para o PDF caber em capa + 5 laudas (Arial 12, espaçamento 1,5).
@@ -21,7 +21,7 @@
   const num = i => String(i + 1).padStart(2, '0');
   const fotoUrl = id => (id ? 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w800' : '');
   const softById = id => SOFT.find(s => s.id === id);
-  const logo = (cls = '') => `<span class="logo ${cls}"><img src="assets/logo-a.png" alt="">AUTH</span>`;
+  const logo = (cls = '') => `<span class="logo ${cls}">AUTH<span class="logo-dot"></span></span>`;
   const isDemo = () => !C.API_URL || new URLSearchParams(location.search).has('demo');
 
   function normalize(r, i) {
@@ -42,24 +42,6 @@
 
   const pending = i => ({ n: num(i), nome: C.INTEGRANTES[i], pendente: true, skills: [], cult: {}, caso: {}, areas: {}, foto: '' });
 
-  // Completa o integrante com o perfil do deck (config.js → PERFIS). O formulário tem prioridade.
-  function withPerfil(m) {
-    const p = (C.PERFIS || {})[m.nome];
-    m.fonte = m.pendente ? '' : 'form';
-    m.frase = ''; m.softList = [];
-    if (!p) return m;
-    if (m.pendente) Object.assign(m, { pendente: false, fonte: 'deck', cargo: '', empresa: '', formacao: '', contrib: '' });
-    return Object.assign(m, {
-      frase: p.frase || '',
-      softList: p.soft || [],
-      cargo: m.cargo || p.cargo || '',
-      formacao: m.formacao || p.formacao || '',
-      skills: m.skills.length ? m.skills : (p.hard || []),
-      contrib: m.contrib || p.resumo || '',
-      foto: m.foto || p.foto || ''
-    });
-  }
-
   // Dados de exemplo (modo demonstração). Nomes genéricos para não atribuir nada a pessoas reais.
   const DEMO = [
     { cargo: 'Cargo atual', empresa: 'Empresa atual', formacao: '[Engenharia Química]', skill1: 'Processos industriais', skill2: 'Gestão da qualidade', skill3: 'Bioquímica aplicada', contrib: '[Exemplo] Traz leitura técnica de processos e qualidade para avaliar a operação das unidades de bioquímica e alimentos.', cult_tipo: 'Nacional', cult_local: '[Cidade, UF]', cult_periodo: '2018', cultural: '[Exemplo] Período em uma planta no interior. Aprendeu a ouvir a operação antes de propor mudanças.', soft: 'pla', exemplo: '[Exemplo] Organizou a auditoria de qualidade de três linhas de produção em paralelo.', areas: { proc: 2, ops: 1, esg: 2, ino: 1 } },
@@ -71,7 +53,7 @@
 
   async function loadTeam() {
     if (isDemo()) {
-      const membros = DEMO.slice(0, C.INTEGRANTES.length).map((r, i) => Object.assign(normalize(r, i), { nome: 'Nome do Integrante ' + (i + 1), frase: '', softList: [] }));
+      const membros = DEMO.slice(0, C.INTEGRANTES.length).map((r, i) => Object.assign(normalize(r, i), { nome: 'Nome do Integrante ' + (i + 1) }));
       return { membros, demo: true };
     }
     try {
@@ -80,10 +62,10 @@
       if (!data.ok) throw new Error(data.error || 'Resposta inválida');
       const byName = {};
       (data.membros || []).forEach(r => { byName[String(r.nome).trim()] = r; });
-      const membros = C.INTEGRANTES.map((nome, i) => withPerfil(byName[nome] ? normalize(byName[nome], i) : pending(i)));
+      const membros = C.INTEGRANTES.map((nome, i) => (byName[nome] ? normalize(byName[nome], i) : pending(i)));
       return { membros, demo: false };
     } catch (err) {
-      return { membros: C.INTEGRANTES.map((_, i) => withPerfil(pending(i))), demo: false, error: String(err.message || err) };
+      return { membros: C.INTEGRANTES.map((_, i) => pending(i)), demo: false, error: String(err.message || err) };
     }
   }
 

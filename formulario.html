@@ -6,22 +6,21 @@
 <title>Formulário AUTH</title>
 <meta name="description" content="Preencha seu perfil para o portfólio da Equipe AUTH">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<link rel="icon" type="image/png" href="assets/logo-a.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D2026'/%3E%3Crect x='19' y='19' width='7' height='7' fill='%232F7A5F'/%3E%3C/svg%3E">
 <script src="config.js"></script>
 <script src="assets/auth.js"></script>
 <style>
   .f-head { padding: 28px var(--gutter) 32px; background: #fff; border-bottom: 1px solid var(--linha); }
-  .f-head h1::before { content: ''; display: block; width: 88px; height: 4px; margin-bottom: 18px; border-radius: 2px; background: var(--barras); }
-  .f-head h1 { margin: 28px 0 10px; font: 600 30px/1.2 var(--display); color: var(--grafite); letter-spacing: -0.02em; text-wrap: balance; max-width: 720px; }
+  .f-head h1 { margin: 28px 0 10px; font: 700 32px/1.15 var(--display); letter-spacing: -0.02em; text-wrap: balance; max-width: 720px; }
   .f-head p { margin: 0; max-width: 640px; color: var(--texto-2); text-wrap: pretty; }
   main { padding: 8px var(--gutter) 56px; max-width: 1080px; margin: 0 auto; }
   .fsec { display: flex; flex-wrap: wrap; gap: 16px 48px; padding: 32px 0; border-top: 1px solid var(--linha); }
   .fsec:first-of-type { border-top: 0; }
   .fsec-side { flex: 1 1 200px; max-width: 260px; }
-  .fsec-side .k { font: 600 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--verde); }
-  .fsec-side h2 { margin: 4px 0 6px; font: 600 20px/1.25 var(--display); color: var(--grafite); }
+  .fsec-side .k { font: 700 13px var(--display); color: var(--verde); }
+  .fsec-side h2 { margin: 4px 0 6px; font: 700 20px/1.25 var(--display); }
   .fsec-side p { margin: 0; font-size: 14px; color: var(--muted); }
   .fsec-body { flex: 999 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
   .field { display: flex; flex-direction: column; gap: 6px; }
@@ -31,10 +30,10 @@
   .err { font-size: 13px; color: var(--terracota); font-weight: 700; }
   .err:empty { display: none; }
   .row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-  input[type=text], select, textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--linha); border-radius: 8px; font: 16px/1.5 Arial, Helvetica, sans-serif; background: #fff; color: var(--grafite); outline: none; }
-  input[type=text]:focus, select:focus, textarea:focus, .tagbox:focus-within { border-color: var(--ciano); box-shadow: 0 0 0 3px var(--verde-t); }
+  input[type=text], select, textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--linha); border-radius: 8px; font: 16px/1.5 Arial, sans-serif; background: #fff; color: var(--grafite); outline: none; }
+  input[type=text]:focus, select:focus, textarea:focus, .tagbox:focus-within { border-color: var(--grafite); }
   textarea { resize: vertical; }
-  ::placeholder { color: #94A3B8; }
+  ::placeholder { color: #9A9890; }
   .bad input[type=text], .bad select, .bad textarea, .bad .tagbox, .bad .photo { border-color: var(--terracota) !important; }
   .counter { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
   .counter .c { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -68,9 +67,9 @@
   .check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 15px; }
   .check input { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--verde); }
   .done { padding: 48px var(--gutter) 64px; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
-  .done h2 { margin: 0; font: 600 28px/1.2 var(--display); color: var(--grafite); letter-spacing: -0.02em; text-wrap: balance; }
+  .done h2 { margin: 0; font: 700 30px/1.15 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
   .ok { width: 48px; height: 48px; border-radius: 50%; background: var(--verde); color: #fff; font: 700 24px/48px Arial; text-align: center; }
-  .preview { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; background: #fff; border: 1px solid var(--linha); border-radius: 12px; box-shadow: var(--sombra); }
+  .preview { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; background: #fff; border: 1px solid var(--linha); border-radius: 12px; }
   .preview .pf { flex: none; width: 88px; height: 110px; border-radius: 8px; overflow: hidden; }
   [hidden] { display: none !important; }
 </style>
@@ -79,7 +78,7 @@
 <div id="demoBar" class="status demo" hidden><strong>Modo demonstração</strong><span>Nada é salvo. Configure <code>API_URL</code> em config.js.</span></div>
 <header class="f-head">
   <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
-    <span class="logo" style="font-size:26px"><img src="assets/logo-a.png" alt="">AUTH</span>
+    <span class="logo" style="font-size:30px">AUTH<span class="logo-dot"></span></span>
     <span class="hint">Portfólio · Processo Seletivo Argo Menthor</span>
   </div>
   <h1>Seu perfil no portfólio da equipe</h1>
@@ -337,7 +336,7 @@
     paintSkills(); paintOpts(); paintAreas(); paintPhoto();
   }
   $('#nome').addEventListener('change', () => {
-    const m = team.find(x => x.nome === v('nome') && x.fonte === 'form');
+    const m = team.find(x => x.nome === v('nome') && !x.pendente);
     $('#prevBox').hidden = !m;
     if (m) fill(m);
     paintTaken();
