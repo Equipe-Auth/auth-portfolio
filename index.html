@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" href="assets/logo-mark.png">
 <script src="config.js"></script>
 <script src="assets/auth.js"></script>
+<script src="assets/ppt.js"></script>
 </head>
 <body>
 <div id="app"><div class="loading">Carregando o portfólio…</div></div>
@@ -50,7 +51,7 @@
       <div class="nav-links">
         <a href="#integrantes">Integrantes</a><a href="#mapa">Complementaridade</a><a href="#vivencias">Vivências</a>
         <a href="#competencias">Competências</a><a href="#caso">Caso real</a>
-        <a class="acc" href="pdf.html${demo && C.API_URL ? '?demo' : ''}">Versão PDF ↗</a>
+        <a class="acc" href="#" id="baixarPpt">Apresentação (PPT) ↓</a>
       </div>
     </div>
     <div class="faixa"></div>
@@ -210,6 +211,7 @@
   <div class="faixa" style="height:8px"></div>`;
 
   document.getElementById('app').innerHTML = status + nav + cover + manifesto + cards + matrix + trips + skills + caso + closing;
+  document.getElementById('baixarPpt').addEventListener('click', e => { e.preventDefault(); window.AUTH_PPT.gerar(e.currentTarget); });
 })();
 </script>
 </body>
