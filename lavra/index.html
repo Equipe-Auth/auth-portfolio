@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lavra · Plano de ação ChocoArgo</title>
+<meta name="description" content="Desafio ARGo · Etapa 2 · Equipe AUTH: plano de ação para a ChocoArgo com a marca Lavra e quatro ações de gestão de crise.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232A1A14'/%3E%3Cg transform='rotate(-22 16 16)'%3E%3CclipPath id='c'%3E%3Cellipse cx='16' cy='16' rx='7' ry='11'/%3E%3C/clipPath%3E%3Cg clip-path='url(%23c)'%3E%3Crect x='5' y='5' width='22' height='3.4' fill='%23EAD9B8'/%3E%3Crect x='5' y='9.6' width='22' height='3.4' fill='%23EAD9B8'/%3E%3Crect x='5' y='14.2' width='22' height='3.4' fill='%23A4492A'/%3E%3Crect x='5' y='18.8' width='22' height='3.4' fill='%23EAD9B8'/%3E%3Crect x='5' y='23.4' width='22' height='3.6' fill='%23EAD9B8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cacau: #2A1A14; --linho: #F5EFE6; --polpa: #EAD9B8; --terra: #A4492A; --cabruca: #1F4A42;
+    --texto-2: #5C4A40; --linha: #D6CBBB;
+    --serif: 'Instrument Serif', Georgia, serif; --sans: 'Hanken Grotesk', Arial, sans-serif; --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --g: max(20px, 5%);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--linho); color: var(--cacau); font: 17px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: var(--terra); }
+  a:hover { color: var(--cacau); }
+  img { max-width: 100%; height: auto; display: block; }
+  p { margin: 0; text-wrap: pretty; }
+  em { font-style: italic; }
+
+  /* Símbolo: amêndoa com cinco faixas; a do meio é o produtor */
+  .simbolo { --w: 40px; --f: var(--polpa); width: var(--w); height: calc(var(--w) * 1.61); border-radius: 50%; overflow: hidden; display: flex; flex-direction: column; gap: calc(var(--w) * .09); transform: rotate(-22deg); flex: none; }
+  .simbolo i { flex: 1; background: var(--f); }
+  .simbolo i:nth-child(3) { background: var(--terra); }
+  .simbolo.escuro { --f: var(--cacau); }
+  .marca { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .marca-linha { display: flex; align-items: center; gap: .32em; font: 400 1em/0.9 var(--serif); letter-spacing: -0.01em; }
+  .endosso { margin-left: 1.4em; padding-top: 8px; border-top: 1px solid currentColor; font: 500 max(13px, .1em) var(--sans); letter-spacing: .06em; }
+
+  /* Topo */
+  .topo { background: var(--cacau); color: var(--polpa); padding: 96px var(--g) 72px; display: flex; flex-direction: column; align-items: center; gap: 56px; text-align: center; }
+  .topo .marca { font-size: clamp(84px, 13vw, 168px); }
+  .topo .marca .endosso { font-size: 17px; }
+  .topo .simbolo { --w: .52em; }
+  .topo h1 { margin: 0; font: 400 clamp(26px, 3.4vw, 40px)/1.15 var(--serif); max-width: 820px; text-wrap: balance; }
+  .topo .slogan { font: italic 400 clamp(20px, 2.4vw, 28px)/1.3 var(--serif); color: #fff; }
+  .meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; font: 13px var(--mono); letter-spacing: .04em; }
+  .faixas { display: flex; flex-direction: column; gap: 6px; }
+  .faixas span { height: 8px; background: #3A2820; }
+  .faixas span:nth-child(3) { background: var(--terra); }
+
+  /* Navegação */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(245, 239, 230, .95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--linha); }
+  nav div { max-width: 1200px; margin: 0 auto; padding: 12px var(--g); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font: 500 14px var(--sans); }
+  nav a { color: var(--cacau); text-decoration: none; }
+  nav a:hover { color: var(--terra); }
+  nav .mini { display: flex; align-items: center; gap: 8px; font: 400 24px/1 var(--serif); margin-right: auto; }
+  nav .mini .simbolo { --w: 13px; --f: var(--cacau); }
+
+  /* Seções */
+  section { padding: 88px var(--g); }
+  section.polpa { background: var(--polpa); }
+  section.cacau { background: var(--cacau); color: var(--polpa); }
+  section.cabruca { background: var(--cabruca); color: var(--linho); }
+  .in { max-width: 1200px; margin: 0 auto; }
+  .rotulo { font: 13px var(--mono); color: var(--terra); letter-spacing: .04em; }
+  section.cacau .rotulo, section.cabruca .rotulo { color: #E9A587; }
+  h2 { margin: 10px 0 0; font: 400 clamp(38px, 5vw, 60px)/1.02 var(--serif); letter-spacing: -0.01em; text-wrap: balance; }
+  h3 { margin: 0; font: 400 clamp(26px, 2.8vw, 34px)/1.1 var(--serif); }
+  .cab { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px 64px; margin-bottom: 48px; align-items: end; }
+  .lead { font-size: 18px; color: var(--texto-2); }
+  section.cacau .lead, section.cabruca .lead { color: inherit; opacity: .85; }
+  .grid { display: grid; gap: 20px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+  .cartao { background: #fff; border: 1px solid var(--linha); padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+  .cartao.terra { border-top: 4px solid var(--terra); }
+  .num { font: 400 64px/1 var(--serif); color: var(--terra); }
+  .dado { font: 13px var(--mono); color: var(--texto-2); }
+  .pill { display: inline-block; padding: 3px 12px; border: 1px solid currentColor; border-radius: 999px; font: 13px var(--mono); }
+
+  /* Marca */
+  .versoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+  .versao { min-height: 190px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--linha); background: #fff; }
+  .versao .marca { font-size: 62px; }
+  .versao .simbolo { --w: .5em; }
+  .versao.neg { background: var(--cacau); color: var(--polpa); border-color: var(--cacau); }
+  .versao.so { background: var(--polpa); gap: 26px; }
+  .versao.so .simbolo:nth-child(2) { --w: 26px; }
+  .versao.so .simbolo:nth-child(3) { --w: 16px; }
+  .paleta { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 12px; }
+  .cor { border: 1px solid var(--linha); background: #fff; }
+  .cor div { height: 96px; }
+  .cor p { padding: 12px 14px; font-size: 14px; line-height: 1.45; }
+  .cor b { display: block; font-size: 16px; }
+  .tipos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .tipo { background: #fff; border: 1px solid var(--linha); padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+  .tipo .aa { font-size: 52px; line-height: 1; }
+
+  /* Tabelas */
+  .tabela { overflow-x: auto; background: #fff; border: 1px solid var(--linha); }
+  table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 15px; line-height: 1.5; }
+  th { background: var(--cacau); color: var(--polpa); text-align: left; font: 600 14px var(--sans); padding: 12px 14px; }
+  td { padding: 12px 14px; border-top: 1px solid var(--linha); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+  td.mono { font: 13px var(--mono); white-space: nowrap; }
+
+  /* Produtos e peças */
+  .produto { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 28px 56px; align-items: center; padding: 40px 0; border-top: 1px solid var(--linha); }
+  .produto:first-of-type { border-top: 0; padding-top: 0; }
+  .produto figure { margin: 0; }
+  figcaption { margin-top: 8px; font: 12px var(--mono); color: var(--texto-2); }
+  .preco { font: 500 15px var(--mono); color: var(--terra); }
+  .peca { display: flex; flex-direction: column; gap: 14px; }
+  .peca img { border: 1px solid var(--linha); background: var(--polpa); }
+
+  /* Crise */
+  .principios { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 0; border-top: 1px solid rgba(234, 217, 184, .3); margin-bottom: 56px; }
+  .principios div { padding: 20px 24px 20px 0; border-bottom: 1px solid rgba(234, 217, 184, .3); }
+  .principios b { display: block; font: 400 26px/1.2 var(--serif); color: #fff; }
+  .crise { margin-top: 48px; }
+  .crise > .rotulo { display: block; margin-bottom: 6px; }
+  .crise h3 { color: #fff; margin-bottom: 20px; }
+  .acao { background: #3A2820; border-left: 4px solid var(--terra); padding: 26px 28px; display: flex; flex-direction: column; gap: 12px; color: var(--polpa); }
+  .acao .topo-acao { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+  .acao .n { font: 400 44px/1 var(--serif); color: #E9A587; }
+  .acao h4 { margin: 0; font: 600 20px/1.25 var(--sans); color: #fff; }
+  .acao ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; }
+  .acao dl { margin: 6px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 20px; padding-top: 14px; border-top: 1px solid rgba(234, 217, 184, .25); }
+  .acao dt { font: 12px var(--mono); color: #E9A587; letter-spacing: .04em; }
+  .acao dd { margin: 2px 0 0; font-size: 15px; line-height: 1.45; }
+  .ligacao { margin-top: 48px; padding: 28px; background: var(--polpa); color: var(--cacau); }
+  section.cacau .ligacao .rotulo { color: var(--terra); }
+
+  /* Fechamento */
+  .fecho { text-align: left; }
+  .fecho .frase { font: 400 clamp(32px, 4.6vw, 58px)/1.05 var(--serif); max-width: 980px; text-wrap: balance; }
+  .decl { margin-top: 48px; padding: 28px; border: 1px solid var(--linha); background: #fff; max-width: 980px; display: flex; flex-direction: column; gap: 16px; }
+  .decl div { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; }
+  .decl span { padding: 8px 0; border-bottom: 1px solid var(--cacau); font-weight: 600; }
+  footer { background: var(--cacau); color: var(--polpa); padding: 40px var(--g); }
+  footer .in { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; }
+  footer .marca { font-size: 44px; }
+  footer .simbolo { --w: .5em; }
+  footer .endosso { font-size: 13px; }
+  footer a { color: var(--polpa); }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="marca">
+    <div class="marca-linha"><span class="simbolo"><i></i><i></i><i></i><i></i><i></i></span>Lavra</div>
+    <div class="endosso">uma marca ChocoArgo</div>
+  </div>
+  <h1>Plano de ação para a ChocoArgo e gestão de crise</h1>
+  <p class="slogan">“Do produtor à barra, sem segredo.”</p>
+  <div class="meta"><span>Desafio ARGo · Etapa 2</span><span>MBA FGV</span><span>Equipe #6 – AUTH</span><span>Linhares, ES · Outubro/2026</span></div>
+</header>
+
+<nav>
+  <div>
+    <a class="mini" href="#"><span class="simbolo"><i></i><i></i><i></i><i></i><i></i></span>Lavra</a>
+    <a href="#objetivo">Objetivo</a><a href="#marca">Marca</a><a href="#consumidor">Consumidor</a><a href="#concorrentes">Concorrentes</a>
+    <a href="#produtos">Produtos</a><a href="#pdv">Pontos de venda</a><a href="#comunicacao">Comunicação</a><a href="#plano">Plano</a><a href="#crise">Crise</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="objetivo">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">01 — Objetivo</span><h2>Por que a Argo Menthor cria a ChocoArgo</h2></div>
+      <p class="lead">A ChocoArgo é a unidade estratégica de negócios da <em>holding</em> Argo Menthor dedicada a chocolates finos para o mercado nacional e para exportação, instalada em Linhares (ES).</p>
+    </div>
+    <div class="grid g3">
+      <div class="cartao terra"><span class="num">70%</span><p>da produção de cacau do Espírito Santo vem de Linhares, onde a ChocoArgo está instalada <span class="dado">(SEAG, 2024 apud FGV, 2026)</span>.</p></div>
+      <div class="cartao terra"><h3>Inovação própria</h3><p>Uma variedade de cacau do P&amp;D do grupo, de altíssima qualidade e pouco exposta a pragas como a vassoura-de-bruxa, que já eleva a produtividade dos produtores.</p></div>
+      <div class="cartao terra"><h3>ESG no DNA</h3><p>Por decisão do <em>board</em>, o sucesso não se mede só por clientes e pontos de venda: a ChocoArgo precisa aumentar o número e a renda dos pequenos produtores rurais.</p></div>
+    </div>
+    <p class="lead" style="margin-top:32px;max-width:900px">O objetivo é levar a Argo Menthor, hoje uma indústria bioquímica e de insumos, para a área de alimentos e para perto do consumidor final, transformando a inovação em uma marca de valor agregado, no Brasil e no exterior, com transparência sobre como o grupo trata o ESG no dia a dia.</p>
+  </div>
+</section>
+
+<section id="marca" class="polpa">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">02 — A marca</span><h2>Lavra: cada barra tem autor</h2></div>
+      <p class="lead">Lavrar é trabalhar a terra; “de lavra de” significa “de autoria de”. O nome afirma que cada barra é obra de um produtor identificável.</p>
+    </div>
+    <div class="grid g2" style="margin-bottom:40px">
+      <div class="cartao"><span class="rotulo">Nome fantasia</span><h3>Lavra · / LÁ-vra /</h3><p>Duas sílabas, sem acentos nem sons exclusivos do português: é pronunciado da mesma forma nos mercados de exportação e não pede tradução. Foi preferido a nomes geográficos, como Foz (foz do Rio Doce), porque fala das pessoas que plantam, e não só do lugar. Antes do lançamento: busca formal no INPI (classe 30) e na OMPI.</p></div>
+      <div class="cartao"><span class="rotulo">Slogan</span><h3>“Do produtor à barra, sem segredo.”</h3><p>Rastreabilidade de ponta a ponta e transparência como compromisso. Depois da denúncia, a marca enfrenta o tema em vez de evitá-lo, e o QR code de cada barra cumpre a promessa. O endosso “uma marca ChocoArgo” reforça que nada sobre a origem fica escondido.</p><span class="dado">Exportação: <em>Farm to bar, nothing hidden.</em></span></div>
+    </div>
+
+    <span class="rotulo">Logomarca</span>
+    <div class="versoes" style="margin:12px 0 16px">
+      <div class="versao"><div class="marca"><div class="marca-linha"><span class="simbolo escuro"><i></i><i></i><i></i><i></i><i></i></span>Lavra</div><div class="endosso">uma marca ChocoArgo</div></div></div>
+      <div class="versao neg"><div class="marca"><div class="marca-linha"><span class="simbolo"><i></i><i></i><i></i><i></i><i></i></span>Lavra</div><div class="endosso">uma marca ChocoArgo</div></div></div>
+      <div class="versao so"><span class="simbolo escuro" style="--w:48px"><i></i><i></i><i></i><i></i><i></i></span><span class="simbolo escuro"><i></i><i></i><i></i><i></i><i></i></span><span class="simbolo escuro"><i></i><i></i><i></i><i></i><i></i></span></div>
+    </div>
+    <p style="max-width:960px;margin-bottom:48px">O símbolo é uma amêndoa de cacau formada por cinco faixas horizontais, que lembram ao mesmo tempo os sulcos da terra lavrada e as camadas de uma barra de chocolate. Quatro faixas são cor de cacau; a do meio, em terracota, representa o produtor: entre as muitas linhas de plantio, há sempre uma que pode ser identificada, e é ela que dá nome a cada barra. A leve inclinação evoca o relevo do vale do Rio Doce, sem recorrer a folhas, globos ou mãos. O nome usa uma serifada fina, de repertório editorial e artesanal, sempre acompanhada da assinatura “uma marca ChocoArgo”, que assume a empresa por trás da marca.</p>
+
+    <span class="rotulo">Paleta · do fruto ao rio</span>
+    <div class="paleta" style="margin:12px 0 48px">
+      <div class="cor"><div style="background:#2A1A14"></div><p><b>Cacau</b>#2A1A14 · cor principal, logomarca e textos</p></div>
+      <div class="cor"><div style="background:#F5EFE6"></div><p><b>Linho</b>#F5EFE6 · fundo base, ar de papel artesanal</p></div>
+      <div class="cor"><div style="background:#EAD9B8"></div><p><b>Polpa</b>#EAD9B8 · apoio claro, a polpa do fruto</p></div>
+      <div class="cor"><div style="background:#A4492A"></div><p><b>Terra do Rio Doce</b>#A4492A · acento: a faixa do produtor</p></div>
+      <div class="cor"><div style="background:#1F4A42"></div><p><b>Cabruca</b>#1F4A42 · a mata que sombreia o cacau</p></div>
+    </div>
+
+    <span class="rotulo">Tipografia · três vozes</span>
+    <div class="tipos" style="margin-top:12px">
+      <div class="tipo"><span class="aa" style="font-family:var(--serif)">Aa</span><b>Instrument Serif</b><span>Títulos, logotipo, percentuais de cacau e citações.</span></div>
+      <div class="tipo"><span class="aa" style="font-family:var(--sans)">Aa</span><b>Hanken Grotesk</b><span>Textos, rótulos, ingredientes e a assinatura de endosso.</span></div>
+      <div class="tipo"><span class="aa" style="font-family:var(--mono)">Aa</span><b>IBM Plex Mono</b><span class="dado">LOTE 0247 · 19°23′S 40°04′O</span><span>Só para dados verificáveis: lote, safra, datas e valores pagos.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="consumidor">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">03 — Consumidor</span><h2>Para quem trata o chocolate como um pequeno luxo do dia a dia</h2></div>
+      <p class="lead">Pagar mais faz sentido para esse público quando o sabor é superior e a diferença de preço tem destino declarado e auditável.</p>
+    </div>
+    <div class="grid g3">
+      <div class="cartao"><span class="rotulo">Perfil</span><p>Adultos de 28 a 50 anos, classes A e B, em capitais do Sudeste e do Sul. No exterior, lojas de cafés e chocolates especiais na Europa e na América do Norte.</p></div>
+      <div class="cartao"><span class="rotulo">Hábitos</span><p>Tomam café especial, leem rótulos, compram em empórios, cafeterias, lojas de produtos naturais e pela internet, viajam com frequência e dão chocolate de presente.</p></div>
+      <div class="cartao"><span class="rotulo">Valores</span><p>Origem e comida de verdade. Preferem marcas que comprovam o que dizem e desconfiam de discurso verde sem dados.</p></div>
+    </div>
+    <div class="cartao terra" style="margin-top:20px">
+      <span class="rotulo">Faixa de preço · premium acessível</span>
+      <p>Acima das marcas premium de massa e abaixo dos <em>bean-to-bar</em> artesanais. É o ponto que paga o prêmio aos produtores e gera o volume necessário para trazer mais famílias para a cadeia: o propósito depende de escala.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 28px"><span class="preco">Origem 70% · R$ 26–32</span><span class="preco">Encontros · R$ 24–30</span><span class="preco">Amêndoas Safra · R$ 54–64</span><span class="preco">Exportação · US$ 7–9</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="concorrentes" class="polpa">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">04 — Concorrentes</span><h2>O que os outros não mostram</h2></div>
+      <p class="lead">O mercado de chocolates finos é disputado e o consumidor é fiel às marcas que conhece. A Lavra compete com o nome do produtor, o lote e quanto do preço volta para o campo.</p>
+    </div>
+    <div class="tabela">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Posicionamento</th><th>Por que é concorrente</th><th>Como a Lavra se diferencia</th></tr></thead>
+        <tbody>
+          <tr><td>Kopenhagen</td><td>Marca brasileira tradicional de chocolates finos, com lojas próprias.</td><td>Disputa o mesmo consumidor de presente e de chocolate premium nacional.</td><td>Origem única e produtor nomeado em cada barra; preço premium acessível.</td></tr>
+          <tr><td>Dengo</td><td>Marca brasileira que comunica cacau do sul da Bahia e valorização do produtor.</td><td>É a mais próxima em propósito: fala de origem e de produtor.</td><td>Rastreabilidade por lote, valor pago publicado no verso, cacau capixaba de variedade própria.</td></tr>
+          <tr><td>Lindt (linha Excellence)</td><td>Marca suíça importada, referência de chocolate amargo em supermercados.</td><td>Ocupa a gôndola premium e a ocasião “70% cacau”.</td><td>Origem conhecida e brasileira, frescor e a história do produtor que a importada não oferece.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="produtos">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">05 — Produto · o que vender?</span><h2>Uma linha de entrada e duas ideias novas</h2></div>
+      <p class="lead">Em todas as embalagens, a faixa terracota traz o nome da família produtora e o lote; o QR code leva à página do lote.</p>
+    </div>
+    <div class="produto">
+      <figure><img src="img/origem.jpg" alt="Embalagem Lavra Origem 70%, frente e verso" width="1100" height="886" loading="lazy"><figcaption>Nomes e valores ilustrativos.</figcaption></figure>
+      <div class="peca"><span class="rotulo">Linha de entrada</span><h3>Origem 70%</h3><p>Chocolate amargo de origem única, 80 g. A frente traz o produtor, o lote e a safra; o verso mostra para onde vai cada real do preço: produtor, fundo de assistência técnica, fábrica e impostos, distribuição e loja.</p><span class="preco">R$ 26 a R$ 32</span></div>
+    </div>
+    <div class="produto">
+      <div class="peca"><span class="rotulo">Ideia 1 · novo sabor</span><h3>Encontros ao leite com café</h3><p>50% de cacau de Linhares com café conilon capixaba, 80 g. A embalagem nomeia duas famílias, a do cacau e a do café, levando um segundo pequeno produtor do Espírito Santo para a cadeia. Atrai quem ainda não compra chocolate 70% e se conecta ao hábito do café especial.</p><span class="preco">R$ 24 a R$ 30</span></div>
+      <figure><img src="img/encontros.jpg" alt="Embalagem Lavra Encontros ao leite com café, frente e verso" width="1100" height="871" loading="lazy"><figcaption>Nomes ilustrativos.</figcaption></figure>
+    </div>
+    <div class="produto">
+      <figure><img src="img/amendoas.jpg" alt="Caixa Lavra Amêndoas Safra e interior com cinco fileiras de bombons" width="1100" height="652" loading="lazy"><figcaption>Nomes ilustrativos.</figcaption></figure>
+      <div class="peca"><span class="rotulo">Ideia 2 · novo formato</span><h3>Amêndoas Safra</h3><p>Caixa com 10 bombons no formato do símbolo, recheados com ganache de polpa de cacau, em cinco fileiras, uma por produtor, com cartão de degustação. A fileira central homenageia um produtor a cada safra. Formato de presente, pensado para aeroportos e exportação.</p><span class="preco">R$ 54 a R$ 64</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="pdv" class="polpa">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">06 — Pontos de venda · onde vender?</span><h2>Onde o público já está</h2></div>
+      <p class="lead">Dois canais de natureza diferente: o varejo de origem, perto do dia a dia, e o aeroporto, vitrine para presente e exportação.</p>
+    </div>
+    <div class="grid g2">
+      <div class="peca"><img src="img/pdv-display.jpg" alt="Display de balcão Lavra" width="690" height="600" loading="lazy"><span class="rotulo">Local 1</span><h3>Empórios e cafeterias especiais, com e-commerce próprio</h3><p>É onde o público-alvo já compra café e alimentos de origem. O display de balcão, com o QR da rede de produtores, organiza as linhas por cor e se destaca ao lado das marcas líderes. O e-commerce leva a marca a todo o país e concentra as páginas de cada lote.</p></div>
+      <div class="peca"><img src="img/pdv-aeroporto.jpg" alt="Totem Lavra para lojas de aeroporto" width="408" height="825" loading="lazy" style="max-height:600px;width:auto;margin:0 auto"><span class="rotulo">Local 2</span><h3>Lojas de aeroporto (travel retail)</h3><p>Começando por Vitória e Guarulhos: totem bilíngue, preço em real, dólar e euro e a Lavra como “um presente do Espírito Santo”. Atinge o viajante frequente e testa a aceitação internacional antes da exportação em escala.</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:28px;align-items:center">
+      <img src="img/pdv-naturais.jpg" alt="Régua de gôndola Lavra para lojas de produtos naturais" width="678" height="375" loading="lazy">
+      <p><span class="rotulo">Expansão</span><br>Lojas de produtos naturais, com régua de gôndola que destaca os três ingredientes e o selo de fornecedores auditados.</p>
+    </div>
+  </div>
+</section>
+
+<section id="comunicacao">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">07 — Comunicação · como divulgar?</span><h2>Rostos reais, dados verificáveis</h2></div>
+      <p class="lead">Tom de voz transparente, próximo e preciso: números em vez de adjetivos.</p>
+    </div>
+    <div class="grid g2">
+      <div class="peca"><img src="img/post.jpg" alt="Post de Instagram da série Quem plantou?" width="678" height="678" loading="lazy" style="width:min(100%,460px)"><span class="rotulo">Ação 1</span><h3>Série “Quem plantou?” no Instagram</h3><p>A cada lote, um post com retrato do produtor (com autorização e uso de imagem remunerado) conta onde e quando o cacau foi colhido e convida a escanear o QR da barra para ver o valor pago pela arroba e o laudo da última auditoria.</p></div>
+      <div class="peca"><img src="img/selo.jpg" alt="Selo de rastreabilidade com QR code" width="600" height="588" loading="lazy" style="width:min(100%,400px)"><span class="rotulo">Ação 2</span><h3>Degustação com o cartão do produtor</h3><p>Aos sábados, nos empórios e lojas parceiras, degustação da linha Origem com um cartão que apresenta a família do lote; nos aeroportos, o totem exibe um vídeo curto do produtor. O selo de rastreabilidade acompanha rótulo, PDV e site.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="plano" class="polpa">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">08 — Plano de ação</span><h2>Do aceite do board às prateleiras</h2></div>
+      <p class="lead">Mês 0 = aprovação pelo board. A marca só chega às lojas depois da auditoria de 100% dos fornecedores de cacau. Custos em escala relativa, a detalhar no orçamento da ChocoArgo.</p>
+    </div>
+    <div class="tabela">
+      <table>
+        <thead><tr><th>Ação</th><th>Responsável</th><th>Prazo</th><th>Custo</th><th>Indicador</th></tr></thead>
+        <tbody>
+          <tr><td>Auditoria de 100% dos fornecedores e publicação dos resultados</td><td>Sustentabilidade e Compras</td><td class="mono">Meses 0–4</td><td>Médio</td><td>% de fornecedores auditados</td></tr>
+          <tr><td>Programa de produtores Lavra: prêmio de preço e fundo de assistência técnica</td><td>Compras e assistência técnica</td><td class="mono">Meses 1–6</td><td>Alto</td><td>Nº de famílias e renda média por família</td></tr>
+          <tr><td>Registro da marca (INPI e OMPI) e arte-final da identidade</td><td>Marketing e Jurídico</td><td class="mono">Meses 0–3</td><td>Baixo</td><td>Registro protocolado</td></tr>
+          <tr><td>Desenvolvimento da Origem 70% e das Ideias 1 e 2</td><td>P&amp;D e Fábrica</td><td class="mono">Meses 2–8</td><td>Médio</td><td>Produtos aprovados em teste sensorial</td></tr>
+          <tr><td>Plataforma de rastreabilidade: página por lote e QR code</td><td>TI e Sustentabilidade</td><td class="mono">Meses 2–6</td><td>Médio</td><td>% de lotes publicados; acessos ao QR</td></tr>
+          <tr><td>Lançamento em empórios, cafeterias e e-commerce</td><td>Comercial</td><td class="mono">Meses 6–12</td><td>Médio</td><td>Nº de pontos de venda e giro</td></tr>
+          <tr><td>Série “Quem plantou?” e degustações</td><td>Marketing</td><td class="mono">Desde o mês 6</td><td>Baixo</td><td>Engajamento e conversão no PDV</td></tr>
+          <tr><td>Travel retail em Vitória e Guarulhos</td><td>Comercial e Exportação</td><td class="mono">Meses 9–15</td><td>Médio</td><td>Vendas por loja e ticket médio</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="crise" class="cacau">
+  <div class="in">
+    <div class="cab">
+      <div><span class="rotulo">09 — Gestão de crise</span><h2 style="color:#fff">Quatro ações de mitigação para a Argo Menthor</h2></div>
+      <p class="lead">Em 21/04/2025, uma reportagem revelou trabalho infantil em duas propriedades fornecedoras de cacau da ChocoArgo, contrariando o Estatuto da Criança e do Adolescente (BRASIL, 1990), e o Ministério Público do Trabalho apontou a responsabilidade indireta das empresas compradoras. A ChocoArgo rompeu os contratos. Em paralelo, o vídeo do coordenador de Sustentabilidade e Inovação foi adulterado em um ataque <em>hacker</em>.</p>
+    </div>
+    <div class="principios">
+      <div><b>Falar primeiro</b>Posição oficial em até 24 horas, antes que outra versão se consolide.</div>
+      <div><b>Assumir a parte da empresa</b>Reconhecer a falha de fiscalização em vez de responder só que “não sabia”.</div>
+      <div><b>Provar o que mudou</b>Cada compromisso tem prazo, responsável e indicador público.</div>
+    </div>
+
+    <div class="crise">
+      <span class="rotulo">Crise 1</span><h3>Ataque hacker ao vídeo do coordenador de Sustentabilidade</h3>
+      <div class="grid g2">
+        <article class="acao">
+          <div class="topo-acao"><span class="n">1</span><h4>Versão oficial em 24 horas</h4><span class="pill">público externo</span></div>
+          <ul>
+            <li>Pedir às plataformas a remoção do vídeo adulterado e registrar ocorrência na delegacia de crimes cibernéticos.</li>
+            <li>Nota nos canais verificados da Argo Menthor e da ChocoArgo, com o vídeo original regravado pelo coordenador ao lado da liderança.</li>
+            <li>Página “Canais oficiais”, com selo de autenticidade nos vídeos.</li>
+            <li>Envio da nota a jornalistas, clientes, importadores e investidores.</li>
+          </ul>
+          <dl><div><dt>PRAZO</dt><dd>24 horas a 7 dias</dd></div><div><dt>RESPONSÁVEL</dt><dd>Comunicação Corporativa e Jurídico</dd></div><div><dt>INDICADOR</dt><dd>Vídeo removido em até 72 h; alcance da nota maior que o do vídeo falso</dd></div></dl>
+        </article>
+        <article class="acao">
+          <div class="topo-acao"><span class="n">2</span><h4>Casa protegida, equipe informada</h4><span class="pill">público interno</span></div>
+          <ul>
+            <li>Perícia forense, troca de senhas e autenticação em dois fatores em todas as contas de redes e servidores de mídia.</li>
+            <li>Comunicado da presidência aos colaboradores no mesmo dia.</li>
+            <li>Apoio jurídico e psicológico ao coordenador, vítima do ataque.</li>
+            <li>Plano de resposta a incidentes digitais, com comitê de crise e treinamento obrigatório contra phishing.</li>
+          </ul>
+          <dl><div><dt>PRAZO</dt><dd>48 horas a 60 dias</dd></div><div><dt>RESPONSÁVEL</dt><dd>TI e Segurança da Informação, RH</dd></div><div><dt>INDICADOR</dt><dd>100% das contas com dois fatores; 90% da equipe treinada</dd></div></dl>
+        </article>
+      </div>
+    </div>
+
+    <div class="crise">
+      <span class="rotulo">Crise 2</span><h3>Denúncia de trabalho infantil em fornecedores</h3>
+      <div class="grid g2">
+        <article class="acao">
+          <div class="topo-acao"><span class="n">3</span><h4>Cadeia aberta</h4><span class="pill">público externo</span></div>
+          <ul>
+            <li>Pronunciamento da presidência reconhecendo a falha de fiscalização e apresentando o plano com datas.</li>
+            <li>Auditoria independente de 100% dos fornecedores, com lista e resultados publicados no site e no QR code das barras Lavra.</li>
+            <li>Termo de compromisso com o Ministério Público do Trabalho e adesão aos fóruns estaduais de erradicação do trabalho infantil.</li>
+            <li>Relatório público de acompanhamento a cada 90 dias.</li>
+          </ul>
+          <dl><div><dt>PRAZO</dt><dd>7 a 120 dias</dd></div><div><dt>RESPONSÁVEL</dt><dd>Presidência, Sustentabilidade e Compras</dd></div><div><dt>INDICADOR</dt><dd>% de fornecedores auditados; não conformidades corrigidas; tom da imprensa</dd></div></dl>
+        </article>
+        <article class="acao">
+          <div class="topo-acao"><span class="n">4</span><h4>Remediar, não só romper</h4><span class="pill">interno e produtores</span></div>
+          <ul>
+            <li>Acompanhar, com o Conselho Tutelar e a assistência social, as crianças das duas propriedades: matrícula, transporte escolar e apoio às famílias.</li>
+            <li>Novo código de conduta para fornecedores, com visitas sem aviso prévio e treinamento das equipes de campo.</li>
+            <li>Canal de denúncias anônimo por WhatsApp e telefone, em linguagem simples.</li>
+            <li>Prêmio de preço Lavra pago apenas a propriedades com auditoria em dia.</li>
+          </ul>
+          <dl><div><dt>PRAZO</dt><dd>30 a 180 dias</dd></div><div><dt>RESPONSÁVEL</dt><dd>Sustentabilidade, Compras e RH</dd></div><div><dt>INDICADOR</dt><dd>Crianças acompanhadas e frequentando a escola; 100% das equipes treinadas</dd></div></dl>
+        </article>
+      </div>
+    </div>
+
+    <div class="ligacao"><span class="rotulo">Ligação com a Lavra</span><p style="margin-top:6px">A marca só chega às lojas depois da auditoria de 100% dos fornecedores. Os resultados viram conteúdo do QR code de cada barra, e o slogan assume publicamente o compromisso das ações 3 e 4. Assim, a Lavra é a prova da mudança, e não uma forma de desviar a atenção da ChocoArgo.</p></div>
+  </div>
+</section>
+
+<section class="fecho">
+  <div class="in">
+    <span class="rotulo">10 — Considerações finais</span>
+    <p class="frase" style="margin-top:14px">Do produtor à barra, sem segredo<span style="color:var(--terra)">.</span></p>
+    <p class="lead" style="margin-top:24px;max-width:900px">A Lavra transforma a principal fragilidade da ChocoArgo, o controle da cadeia, no centro da proposta de valor: o nome e o símbolo dizem que cada barra tem autor, o QR code comprova e o preço premium acessível remunera os pequenos produtores com escala. Com as quatro ações de crise, a marca nasce com ESG no DNA e se torna a prova pública de que a empresa mudou.</p>
+    <div class="decl">
+      <p>A equipe AUTH informa que os integrantes a seguir colaboraram efetivamente na realização do desafio:</p>
+      <div><span>Gabriel Martins Seabra</span><span>Giovanna Ismael Alves de Souza</span><span>Igor Farina</span><span>Jorge Alberto Portiglioti</span></div>
+    </div>
+    <p class="dado" style="margin-top:28px;max-width:900px">Referências: BRASIL. Lei nº 8.069, de 13 de julho de 1990 (Estatuto da Criança e do Adolescente). FGV. Apresentação da etapa 2 do desafio. ARGo – Alternate Reality Goal. MBA Online, 2026. Trabalho acadêmico: nomes de produtores, valores e peças são ilustrativos.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="in">
+    <div class="marca"><div class="marca-linha"><span class="simbolo"><i></i><i></i><i></i><i></i><i></i></span>Lavra</div><div class="endosso">uma marca ChocoArgo</div></div>
+    <span>Desafio ARGo · Etapa 2 · Equipe AUTH · <a href="../">Portfólio da equipe ↗</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
