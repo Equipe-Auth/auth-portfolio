@@ -59,6 +59,7 @@
       skills: m.skills.length ? m.skills : (p.hard || []),
       contrib: m.contrib || p.resumo || '',
       softIds: [...new Set([...m.softIds, ...(p.soft || [])])],
+      caso: (m.caso && m.caso.contexto) || !p.caso ? m.caso : { ...p.caso },
       areas: formAreas ? m.areas : (p.areas || {}),
       foto: m.foto || p.foto || '',
       pos: p.pos || m.pos
@@ -141,7 +142,7 @@
     const hasCaso = m => !m.pendente && m.caso.contexto && m.caso.acao && m.caso.resultado;
     const casoM = membros.find(m => m.nome === C.CASO_DESTAQUE && hasCaso(m)) || membros.find(hasCaso) || null;
     const caso = casoM ? {
-      titulo: casoM.caso.titulo || 'Caso real', quem: casoM.nome, soft: softById(casoM.soft),
+      titulo: casoM.caso.titulo || 'Caso real', quem: casoM.nome, soft: softById(casoM.caso.soft || casoM.soft),
       meta: [casoM.caso.empresa, casoM.caso.ano].filter(Boolean).join(' · '),
       passos: [['Contexto', casoM.caso.contexto], ['Desafio', casoM.caso.desafio], ['Ação', casoM.caso.acao], ['Resultado', casoM.caso.resultado]].filter(p => p[1])
     } : null;

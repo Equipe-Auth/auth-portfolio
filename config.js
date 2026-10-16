@@ -81,7 +81,17 @@ window.AUTH_CONFIG = {
       hard: ['Planejamento financeiro', 'Fluxo de caixa e controle orçamentário', 'Comercialização de commodities'],
       soft: ['pla'],
       areas: { est: 2, tec: 0, eng: 0, fin: 2, col: 2 },
-      foto: 'assets/fotos/jorge.jpg', pos: '50% 10%'
+      foto: 'assets/fotos/jorge.jpg', pos: '50% 10%',
+      // Caso real enviado pelo Jorge (adaptado ao formato do portfólio)
+      caso: {
+        titulo: 'Sustentabilidade e sequestro de carbono na cana-de-açúcar',
+        empresa: 'Propriedade rural em Mato Grosso do Sul', ano: '',
+        contexto: 'Propriedade de cana-de-açúcar em Mato Grosso do Sul que aderiu a um programa de sustentabilidade com foco em solo e carbono.',
+        desafio: 'Comprovar, em auditoria, os critérios do programa, o que exigia adequar a operação e organizar os registros ambientais.',
+        acao: 'Práticas de conservação do solo e sequestro de carbono, adequações operacionais e registros ambientais organizados para a auditoria.',
+        resultado: 'Auditoria aprovada e bonificação por tonelada de cana produzida: o compromisso ambiental virou receita adicional.',
+        soft: 'pla'
+      }
     }
   }
 };
