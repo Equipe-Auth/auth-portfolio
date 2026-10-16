@@ -175,20 +175,6 @@
     </div>
   </section>
 
-  <section class="fsec">
-    <div class="fsec-side"><div class="k">05 · opcional</div><h2>Caso real</h2><p>Um caso da equipe vira o storytelling em destaque do portfólio. Se começar, preencha contexto, ação e resultado.</p></div>
-    <div class="fsec-body">
-      <label class="field" data-f="caso_titulo"><span class="lbl">Título do caso</span><input type="text" name="caso_titulo" placeholder="Ex.: A filial que precisava abastecer em metade do prazo"><span class="err"></span></label>
-      <div class="row2">
-        <label class="field" data-f="caso_empresa"><span class="lbl">Empresa</span><input type="text" name="caso_empresa" placeholder="Onde aconteceu"><span class="err"></span></label>
-        <label class="field" data-f="caso_ano"><span class="lbl">Ano</span><input type="text" name="caso_ano" placeholder="Ex.: 2023"><span class="err"></span></label>
-      </div>
-      <label class="field" data-f="caso_contexto"><span class="lbl">Contexto</span><textarea name="caso_contexto" rows="3" placeholder="Qual era a empresa, a área e o seu papel."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
-      <label class="field" data-f="caso_desafio"><span class="lbl">Desafio</span><textarea name="caso_desafio" rows="3" placeholder="O problema, o que estava em risco e a principal restrição."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
-      <label class="field" data-f="caso_acao"><span class="lbl">Ação</span><textarea name="caso_acao" rows="3" placeholder="O que você fez, em que ordem, e como a competência apareceu."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
-      <label class="field" data-f="caso_resultado"><span class="lbl">Resultado</span><textarea name="caso_resultado" rows="3" placeholder="O efeito mensurável: indicador, antes e depois, prazo."></textarea><div class="counter"><span class="err"></span><span class="c"></span></div></label>
-    </div>
-  </section>
 
   <section style="display:flex;flex-direction:column;gap:20px;padding:28px 0 0;border-top:1px solid var(--linha)">
     <div id="sendErr" class="alert bad" hidden><span class="i">!</span><div id="sendErrMsg"></div></div>
@@ -322,8 +308,6 @@
     if (!v('cultural')) e.cultural = 'Descreva a experiência e o impacto.';
     if (!st.soft) e.soft = 'Escolha uma soft skill.';
     if (!v('exemplo')) e.exemplo = 'Dê um exemplo da competência escolhida.';
-    const caso = ['caso_titulo', 'caso_empresa', 'caso_ano', 'caso_contexto', 'caso_desafio', 'caso_acao', 'caso_resultado'];
-    if (caso.some(v)) ['caso_contexto', 'caso_acao', 'caso_resultado'].forEach(k => { if (!v(k)) e[k] = 'Para o caso entrar no portfólio, preencha este campo.'; });
     return e;
   }
 
@@ -331,7 +315,7 @@
   function fill(m) {
     const set = (k, val) => { if (form.elements[k]) { form.elements[k].value = val || ''; form.elements[k]._upd && form.elements[k]._upd(); } };
     const r = m.raw || {};
-    ['cargo', 'empresa', 'formacao', 'contrib', 'cult_local', 'cult_periodo', 'cultural', 'exemplo', 'caso_titulo', 'caso_empresa', 'caso_ano', 'caso_contexto', 'caso_desafio', 'caso_acao', 'caso_resultado'].forEach(k => set(k, r[k]));
+    ['cargo', 'empresa', 'formacao', 'contrib', 'cult_local', 'cult_periodo', 'cultural', 'exemplo'].forEach(k => set(k, r[k]));
     st.skills = m.skills.slice(0, 3); st.soft = m.soft; st.tipo = m.cult.tipo; st.areas = { ...m.areas };
     st.fotoId = m.fotoId; st.fotoData = ''; st.fotoPreview = m.foto;
     paintSkills(); paintOpts(); paintAreas(); paintPhoto();
@@ -370,8 +354,6 @@
       skill1: st.skills[0], skill2: st.skills[1], skill3: st.skills[2], contrib: v('contrib'),
       areas: st.areas, cult_tipo: st.tipo, cult_local: v('cult_local'), cult_periodo: v('cult_periodo'), cultural: v('cultural'),
       soft: st.soft, exemplo: v('exemplo'),
-      caso_titulo: v('caso_titulo'), caso_empresa: v('caso_empresa'), caso_ano: v('caso_ano'),
-      caso_contexto: v('caso_contexto'), caso_desafio: v('caso_desafio'), caso_acao: v('caso_acao'), caso_resultado: v('caso_resultado'),
       aceite: true, fotoData: st.fotoData || '', fotoId: st.fotoData ? '' : st.fotoId
     };
     const btn = $('#submitBtn'); btn.disabled = true; btn.textContent = 'Enviando…';
