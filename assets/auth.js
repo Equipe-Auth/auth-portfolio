@@ -12,7 +12,7 @@
   // Limites calibrados para o PDF caber em capa + 5 laudas (Arial 12, espaçamento 1,5).
   const LIMITS = {
     cargo: 40, empresa: 40, formacao: 60, skill: 25, contrib: 200,
-    cult_local: 35, cult_periodo: 12, cultural: 120, exemplo: 200,
+    cult_local: 35, cult_periodo: 12, cultural: 120, exemplo: 400,
     caso_titulo: 70, caso_empresa: 40, caso_ano: 12,
     caso_contexto: 150, caso_desafio: 150, caso_acao: 150, caso_resultado: 150
   };
