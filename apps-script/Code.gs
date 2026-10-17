@@ -19,7 +19,8 @@ const INTEGRANTES = [
   'Gabriel Martins Seabra',
   'Giovanna Ismael Alves de Souza',
   'Igor Farina',
-  'Jorge Alberto Portiglioti'
+  'Jorge Alberto Portiglioti',
+  'Lucas Nelson Atallah'
 ];
 const FIELDS = [
   'timestamp', 'nome', 'cargo', 'empresa', 'formacao', 'skill1', 'skill2', 'skill3', 'contrib',

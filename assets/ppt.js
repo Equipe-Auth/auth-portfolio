@@ -102,10 +102,11 @@
         { x: 0.85, y: 0.95, w: 5.6, h: 1.55, fontSize: 32, bold: true });
       s.addImage({ data: faixaH, x: 0.85, y: 2.6, w: 1.5, h: 0.08, altText: '' });
       membros.forEach((m, k) => {
-        const x = 0.85 + (k % 2) * 2.85, y = 3.05 + Math.floor(k / 2) * 1.0;
-        s.addShape(pres.shapes.OVAL, { x: x - 0.04, y: y - 0.04, w: 0.83, h: 0.83, fill: { color: hex(m.cor) }, line: { color: hex(m.cor) } });
-        foto(s, k, x, y, 0.75, 0.75, true);
-        T(s, [{ text: m.n, options: { bold: true, color: hex(m.cor), breakLine: true } }, { text: m.nome, options: { bold: true } }], { x: x + 0.92, y: y - 0.02, w: 1.85, h: 0.85, valign: 'middle' });
+        const d = membros.length > 4 ? 0.6 : 0.75, passo = membros.length > 4 ? 0.82 : 1.0;
+        const x = 0.85 + (k % 2) * 2.85, y = (membros.length > 4 ? 2.9 : 3.05) + Math.floor(k / 2) * passo;
+        s.addShape(pres.shapes.OVAL, { x: x - 0.04, y: y - 0.04, w: d + 0.08, h: d + 0.08, fill: { color: hex(m.cor) }, line: { color: hex(m.cor) } });
+        foto(s, k, x, y, d, d, true);
+        T(s, [{ text: m.n, options: { bold: true, color: hex(m.cor), breakLine: true } }, { text: m.nome, options: { bold: true } }], { x: x + d + 0.15, y: y + d / 2 - 0.42, w: 2.7 - d, h: 0.85, valign: 'middle' });
       });
       s.addNotes('Capa: equipe AUTH e integrantes.');
 
@@ -146,29 +147,47 @@
         s.addShape(pres.shapes.LINE, { x: ix, y, w: iw, h: 0, line: { color: 'E6E8EC', width: 1 } });
         T(s, m.contrib || '', { x: ix, y: y + 0.08, w: iw, h: H - 0.18 - (y + 0.08) });
       };
-      const par = (titulo, a, b) => {
-        const s = wrap(pres.addSlide()); cabecalho(s, titulo);
-        // Escolhe a divisão de largura que deixa as duas colunas com a menor altura máxima
-        const altura = (m, w) => {
-          const iw = w - 0.4, tw = iw - 1.05, l1 = m.frase || [m.cargo, m.empresa].filter(Boolean).join(' · ');
-          const topo = Math.max(1.25, alt(m.nome, tw, 18) + (l1 ? alt(l1, tw, MIN) : 0) + 0.45);
-          const l2 = (m.frase ? [m.cargo, m.empresa, m.formacao] : [m.formacao]).filter(Boolean).join(' · ');
-          return topo + (l2 ? alt(l2, iw, MIN) : 0) + (m.skills.length ? alt(m.skills.join(' · '), iw, MIN) : 0) + alt(m.contrib || '', iw, MIN) + 0.4;
-        };
-        const total = 9.0 - 0.25; let wa = 9.0;
-        if (membros[b]) {
-          let melhor = Infinity;
-          for (let w = 3.2; w <= total - 3.2 + 1e-9; w += 0.05) {
-            const h = Math.max(altura(membros[a], w), altura(membros[b], total - w));
-            if (h < melhor) { melhor = h; wa = w; }
+      // Altura estimada de um card na largura w
+      const altura = (m, w) => {
+        const iw = w - 0.4, tw = iw - 1.05, l1 = m.frase || [m.cargo, m.empresa].filter(Boolean).join(' · ');
+        const topo = Math.max(1.25, alt(m.nome, tw, 18) + (l1 ? alt(l1, tw, MIN) : 0) + 0.45);
+        if (m.pendente) return topo + 0.8;
+        const l2 = (m.frase ? [m.cargo, m.empresa, m.formacao] : [m.formacao]).filter(Boolean).join(' · ');
+        return topo + (l2 ? alt(l2, iw, MIN) : 0) + (m.skills.length ? alt(m.skills.join(' · '), iw, MIN) : 0) + alt(m.contrib || '', iw, MIN) + 0.4;
+      };
+      // Escolhe as larguras das colunas que deixam a coluna mais alta com a menor altura
+      const GAP = 0.25, MINW = 2.3;
+      const larguras = idx => {
+        const total = 9.0 - GAP * (idx.length - 1);
+        if (idx.length === 1) return { ws: [9.0], h: altura(membros[idx[0]], 9.0) };
+        let melhor = { ws: null, h: Infinity };
+        const busca = (k, resto, ws) => {
+          if (k === idx.length - 1) {
+            if (resto < MINW - 1e-9) return;
+            const todas = [...ws, resto], h = Math.max(...todas.map((w, j) => altura(membros[idx[j]], w)));
+            if (h < melhor.h) melhor = { ws: todas, h };
+            return;
           }
-        }
-        card(s, membros[a], a, 0.5, wa);
-        if (membros[b]) card(s, membros[b], b, 0.5 + wa + 0.25, total - wa);
+          for (let w = MINW; w <= resto - MINW * (idx.length - 1 - k) + 1e-9; w += 0.05) busca(k + 1, resto - w, [...ws, w]);
+        };
+        busca(0, total, []);
+        return melhor;
+      };
+      const grupo = (titulo, idx, L) => {
+        const s = wrap(pres.addSlide()); cabecalho(s, titulo);
+        let x = 0.5;
+        idx.forEach((k, j) => { card(s, membros[k], k, x, L.ws[j]); x += L.ws[j] + GAP; });
         s.addNotes('Integrantes: formação, hard skills e contribuição de cada um.');
       };
-      par('02 · Integrantes', 0, 1);
-      if (membros.length > 2) par('03 · Integrantes', 2, 3);
+      // Até 4 integrantes: 2 por slide. Com 5: divide em 2 + 3 (ou 3 + 2), o que couber melhor.
+      const ids = membros.map((_, i) => i), cortes = ids.length > 4 ? [2, 3] : [Math.min(2, ids.length)];
+      let plano = null;
+      cortes.forEach(c => {
+        const g = [ids.slice(0, c), ids.slice(c)].filter(x => x.length), Ls = g.map(larguras), h = Math.max(...Ls.map(l => l.h));
+        if (!plano || h < plano.h) plano = { g, Ls, h };
+      });
+      plano.g.forEach((g, i) => grupo(`0${i + 2} · Integrantes`, g, plano.Ls[i]));
+      window.AUTH_PPT_DEBUG = { grupos: plano.g, alturas: plano.Ls.map(l => +l.h.toFixed(2)), limite: +(H - 0.98 - 0.12).toFixed(2) };
 
       // ---------- 4 · Complementaridade + 4 competências ----------
       s = wrap(pres.addSlide()); cabecalho(s, '04 · Mapa de complementaridade');

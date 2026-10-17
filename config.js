@@ -12,14 +12,15 @@ window.AUTH_CONFIG = {
   DISCIPLINA: 'ARGo – Alternate Reality Goal',
   DATA: 'Outubro/2026',
 
-  // Ordem = numeração 01–04 no portfólio. CORES: uma por integrante, na mesma ordem.
+  // Ordem = numeração 01–05 no portfólio. CORES: uma por integrante, na mesma ordem.
   INTEGRANTES: [
     'Gabriel Martins Seabra',
     'Giovanna Ismael Alves de Souza',
     'Igor Farina',
-    'Jorge Alberto Portiglioti'
+    'Jorge Alberto Portiglioti',
+    'Lucas Nelson Atallah'
   ],
-  CORES: ['#1F5FD6', '#13A3AF', '#F08A1C', '#E4237A'],
+  CORES: ['#1F5FD6', '#13A3AF', '#F08A1C', '#E4237A', '#6CC24A'],
 
   // Texto "Quem somos" (até ~350 caracteres para caber no PDF).
   MANIFESTO: 'Uma equipe multidisciplinar que combina experiências, conhecimentos e perspectivas complementares. A diversidade se traduz em soluções eficazes, colaboração e impacto responsável.',
