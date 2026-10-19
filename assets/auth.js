@@ -158,5 +158,36 @@
     };
   }
 
-  window.AUTH = { C, SOFT, LIMITS, esc, num, fotoUrl, softById, logo, isDemo, loadTeam, submit, resizeImage, derive };
+  // Roda de competências (radar) do mapa de complementaridade, em SVG.
+  // o.font: tamanho do rótulo das áreas, em unidades do desenho (o círculo tem raio 200).
+  const AREA_CORES = ['#3B4FB8', '#13939E', '#7A4FA8', '#B5791C', '#B83A6B'];
+  function radar(D, membros, o = {}) {
+    const f = o.font || 16, R = 200, cx = 0, cy = 0, n = D.matrix.length;
+    const ang = i => (-90 + i * 360 / n) * Math.PI / 180;
+    const pt = (i, v) => [cx + Math.cos(ang(i)) * R * v / 2, cy + Math.sin(ang(i)) * R * v / 2];
+    const fx = x => x.toFixed(1);
+    const anel = [0.5, 1, 1.5, 2].map(v => `<circle cx="0" cy="0" r="${R * v / 2}" fill="none" stroke="#DCDFE6" stroke-width="1.2"/>`).join('');
+    const eixos = D.matrix.map((_, i) => { const [x, y] = pt(i, 2.12); return `<line x1="0" y1="0" x2="${fx(x)}" y2="${fx(y)}" stroke="#DCDFE6" stroke-width="1.2"/>`; }).join('');
+    const ticks = [0.5, 1, 1.5, 2].map(v => `<text x="8" y="${fx(-R * v / 2 - 5)}" font-size="${f * 0.72}" fill="#7A8090">${String(v).replace('.', ',')}</text>`).join('');
+    const formas = membros.map((m, j) => {
+      const ps = D.matrix.map((r, i) => pt(i, Number(r.cells[j]) || 0));
+      return `<g><polygon points="${ps.map(p => p.map(fx).join(',')).join(' ')}" fill="${m.cor}" fill-opacity="0.05" stroke="${m.cor}" stroke-width="3" stroke-linejoin="round"><title>${esc(m.nome)}</title></polygon>` +
+        ps.map(p => `<circle cx="${fx(p[0])}" cy="${fx(p[1])}" r="5" fill="#fff" stroke="${m.cor}" stroke-width="2.5"/>`).join('') + '</g>';
+    }).join('');
+    const rotulos = D.matrix.map((r, i) => {
+      const [x, y] = pt(i, 2.36), c = Math.cos(ang(i));
+      const anchor = Math.abs(c) < 0.2 ? 'middle' : c > 0 ? 'start' : 'end';
+      const linhas = String(r.area).split(' & ');
+      const ls = linhas.length > 1 ? [linhas[0] + ' &', linhas.slice(1).join(' & ')] : linhas;
+      const y0 = y - (ls.length - 1) * f * 0.6 + (Math.sin(ang(i)) > 0.5 ? f * 0.5 : Math.sin(ang(i)) < -0.5 ? -f * 0.2 : f * 0.35);
+      return `<text x="${fx(x)}" y="${fx(y0)}" text-anchor="${anchor}" font-size="${f}" font-weight="700" fill="${AREA_CORES[i % AREA_CORES.length]}">${ls.map((l, k) => `<tspan x="${fx(x)}" dy="${k ? f * 1.2 : 0}">${esc(l)}</tspan>`).join('')}</text>`;
+    }).join('');
+    const maxSin = Math.max(...D.matrix.map((_, i) => Math.sin(ang(i))));
+    const pad = f * 8.6, top = R * 1.18 + f * 1.9, bot = R * 1.18 * maxSin + f * 1.6;
+    return `<svg class="radar" viewBox="${fx(-R - pad)} ${fx(-top)} ${fx(2 * (R + pad))} ${fx(top + bot)}" role="img" aria-label="Roda de competências: nível de cada integrante nas áreas do mapa (0 sem atuação, 1 apoio, 2 especialista)" font-family="Arial, Helvetica, sans-serif">
+      <circle cx="0" cy="0" r="${R * 1.06}" fill="#fff"/>${anel}${eixos}${o.ticks === false ? '' : ticks}${formas}
+      ${o.centro === false ? '' : `<circle cx="0" cy="0" r="18" fill="#EEF0F4"/><text x="0" y="${f * 0.25}" text-anchor="middle" font-size="${f * 0.62}" font-weight="700" fill="#5A6070">AUTH</text>`}${rotulos}</svg>`;
+  }
+
+  window.AUTH = { C, SOFT, LIMITS, esc, num, fotoUrl, softById, logo, isDemo, loadTeam, submit, resizeImage, derive, radar, AREA_CORES };
 })();

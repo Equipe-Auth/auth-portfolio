@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Portfólio AUTH · PDF</title>
 <link rel="icon" type="image/png" href="assets/logo-mark.png">
-<script src="config.js"></script>
-<script src="assets/auth.js"></script>
-<script src="assets/ppt.js"></script>
+<script src="config.js?v=20261019d"></script>
+<script src="assets/auth.js?v=20261019d"></script>
+<script src="assets/ppt.js?v=20261019d"></script>
 <style>
   /* Regra da entrega por escrito: Arial 12, espaçamento 1,5, capa + até 5 laudas. Visual: identidade v2. */
   @page { size: A4; margin: 0; }
@@ -77,6 +77,13 @@
   .pills span { padding: 0 3mm; border: .9pt solid #fff; border-radius: 3mm; }
 
   /* Mapa */
+  .rd { display: grid; grid-template-columns: 1fr 52mm; gap: 4mm; align-items: center; }
+  .rd-fig svg { display: block; width: 100%; height: auto; }
+  .rd-leg { display: flex; flex-direction: column; gap: 1.5mm; }
+  .rd-leg span { display: flex; align-items: center; gap: 2.5mm; }
+  .rd-leg i { flex: none; width: 8mm; height: 1mm; border-radius: .5mm; background: var(--c); }
+  .rd-esc { margin-top: 2mm; padding-top: 2mm; border-top: .75pt solid var(--l); color: var(--m); }
+  .rd-esc b { color: var(--g); }
   .mx { display: grid; grid-template-columns: 1fr repeat(var(--n, 4), 11mm); }
   .mx > span { border-bottom: .5pt solid var(--l); padding: .6mm 0; display: flex; align-items: center; }
   .mx > span.h { border-bottom: 1pt solid var(--g); font-weight: 700; color: var(--m); align-items: end; }
@@ -209,11 +216,13 @@
   const p3 = page(3, '03 · Integrantes · Complementaridade · Caso real', `
     ${membros.slice(4).map(mem).join('')}
     <h2 style="margin-top:5mm">Mapa de complementaridade</h2>
-    <div class="mx" style="--n:${membros.length}">
-      <span class="h">Área</span>${membros.map(m => `<span class="h c" style="--c:${m.cor}"><span class="av" title="${esc(m.nome)}">${img(m)}</span></span>`).join('')}
-      ${D.matrix.map(r => `<span><span><strong>${esc(r.area)}</strong> <span style="color:var(--m)">· ${esc(r.bu)}</span></span></span>${r.cells.map(c => `<span class="c"><span class="d${c}"></span></span>`).join('')}`).join('')}
+    <div class="rd">
+      <div class="rd-fig">${AUTH.radar(D, membros, { font: 40, ticks: false, centro: false })}</div>
+      <div class="rd-leg">
+        ${membros.map(m => `<span style="--c:${m.cor}"><i></i>${esc(short(m.nome))}</span>`).join('')}
+        <div class="rd-esc"><b>2</b> especialista · <b>1</b> apoio · <b>0</b> sem atuação</div>
+      </div>
     </div>
-    <div style="margin-top:1.5mm;color:var(--m)">● especialista   ◐ apoio   · sem atuação</div>
     <h2 style="margin-top:5mm">Caso real em destaque</h2>
     ${c ? `
       <div style="margin:0 0 3mm;color:var(--m)">${esc(c.titulo)} · ${esc(c.quem)}${c.soft ? ' · ' + esc(c.soft.label) : ''}${c.meta ? ' · ' + esc(c.meta) : ''}</div>

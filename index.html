@@ -7,11 +7,11 @@
 <meta name="description" content="Portfólio da Equipe AUTH – Processo Seletivo Argo Menthor · MBA Online FGV">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=20261019d">
 <link rel="icon" type="image/png" href="assets/logo-mark.png">
-<script src="config.js"></script>
-<script src="assets/auth.js"></script>
-<script src="assets/ppt.js"></script>
+<script src="config.js?v=20261019d"></script>
+<script src="assets/auth.js?v=20261019d"></script>
+<script src="assets/ppt.js?v=20261019d"></script>
 </head>
 <body>
 <div id="app"><div class="loading">Carregando o portfólio…</div></div>
@@ -123,18 +123,19 @@
     </div>
   </section>`;
 
-  const dot = c => `<span class="dot${c}" title="${['Sem atuação', 'Apoio', 'Especialista'][c]}"></span>`;
   const matrix = `
   <section id="mapa" class="split">
     <div class="split-main">
       <span class="eyebrow">02 · Mapa de complementaridade</span>
       <h2 class="h2" style="margin-bottom:32px">Nenhuma frente descoberta</h2>
-      <div class="matrix-wrap"><div class="matrix" style="--n:${membros.length}">
-        <div class="mrow head"><span>ÁREA</span>${membros.map(m => `<div class="mhead" style="--c:${m.cor}" title="${esc(m.nome)}">${avatar(m)}<b>${esc(m.nome.split(' ')[0])}</b></div>`).join('')}</div>
-        ${D.matrix.map(r => `
-          <div class="mrow"><div><strong>${esc(r.area)}</strong><br><span class="bu">${esc(r.bu)}</span></div>${r.cells.map(c => `<div class="mcell">${dot(c)}</div>`).join('')}</div>`).join('')}
-      </div></div>
-      <div class="legend"><span><span class="dot2" style="width:18px;height:18px"></span>Especialista</span><span><span class="dot1" style="width:18px;height:18px"></span>Apoio</span></div>
+      <div class="radar-box">
+        <div class="radar-fig">${window.AUTH.radar(D, membros, { font: 21 })}</div>
+        <div class="radar-leg">
+          <b class="leg-t">Integrantes</b>
+          ${membros.map(m => `<span class="leg-m" style="--c:${m.cor}"><i></i>${esc(m.nome)}</span>`).join('')}
+          <div class="leg-escala"><b class="leg-t">Escala do mapa</b><span><em>2</em>Especialista</span><span><em>1</em>Apoio</span><span><em>0</em>Sem atuação</span></div>
+        </div>
+      </div>
     </div>
     <div class="split-side">
       <h3>As 4 competências</h3>

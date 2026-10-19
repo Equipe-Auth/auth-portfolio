@@ -57,7 +57,7 @@
   // Slide com coordenadas em unidades do desenho, convertidas para o formato widescreen
   const esc = o => { const r = { ...o }; ['x', 'y', 'w', 'h'].forEach(k => { if (typeof r[k] === 'number') r[k] *= S; }); if (r.sizing) r.sizing = { ...r.sizing, w: r.sizing.w * S, h: r.sizing.h * S }; return r; };
   const wrap = sl => ({
-    addText: (t, o) => sl.addText(t, esc(o)), addShape: (sh, o) => sl.addShape(sh, esc(o)), addImage: o => sl.addImage(esc(o)),
+    addText: (t, o) => sl.addText(t, esc(o)), addShape: (sh, o) => sl.addShape(sh, esc(o)), addImage: o => sl.addImage(esc(o)), addChart: (t, d, o) => sl.addChart(t, d, esc(o)),
     addNotes: n => sl.addNotes(n), set background(b) { sl.background = b; }
   });
 
@@ -200,27 +200,17 @@
 
       // ---------- 4 · Complementaridade + 4 competências ----------
       s = wrap(pres.addSlide()); cabecalho(s, '04 · Mapa de complementaridade');
-      const mx = 0.5, mw = 5.75, colW = 0.72, nomeW = mw - colW * membros.length;
+      const mx = 0.5, mw = 5.75;
       T(s, 'Nenhuma frente descoberta', { x: mx, y: 1.0, w: mw, h: 0.45, fontSize: 22, bold: true });
-      membros.forEach((m, k) => {
-        const x = mx + nomeW + k * colW + (colW - 0.42) / 2;
-        s.addShape(pres.shapes.OVAL, { x: x - 0.03, y: 1.5, w: 0.48, h: 0.48, fill: { color: hex(m.cor) }, line: { color: hex(m.cor) } });
-        foto(s, k, x, 1.53, 0.42, 0.42, true);
+      T(s, 'Escala: 2 especialista · 1 apoio · 0 sem atuação', { x: mx, y: 1.42, w: mw, h: 0.3, color: TXT2 });
+      // Roda de competências: radar nativo do PowerPoint (editável), uma série por integrante
+      s.addChart(pres.charts.RADAR, membros.map((m, j) => ({ name: short(m.nome), labels: D.matrix.map(r => r.area), values: D.matrix.map(r => Number(r.cells[j]) || 0) })), {
+        x: 0.3, y: 1.85, w: 6.1, h: 3.73, radarStyle: 'marker', layout: { x: 0.02, y: 0.13, w: 0.96, h: 0.66 }, chartColors: membros.map(m => hex(m.cor)),
+        lineSize: 2, lineDataSymbol: 'circle', lineDataSymbolSize: 6,
+        valAxisMinVal: 0, valAxisMaxVal: 2, valAxisMajorUnit: 0.5, valAxisHidden: true, valGridLine: { color: 'DCDFE6', size: 1 },
+        catAxisLabelFontSize: MIN, catAxisLabelFontFace: F, catAxisLabelColor: NAVY,
+        showLegend: true, legendPos: 'b', legendFontSize: MIN, legendFontFace: F, legendColor: NAVY
       });
-      s.addShape(pres.shapes.LINE, { x: mx, y: 2.08, w: mw, h: 0, line: { color: NAVY, width: 1.5 } });
-      const rowH = 0.56;
-      D.matrix.forEach((r, i) => {
-        const y = 2.15 + i * rowH;
-        T(s, r.area, { x: mx, y, w: nomeW - 0.1, h: rowH - 0.05, bold: true, valign: 'middle' });
-        r.cells.forEach((c, k) => {
-          const cx = mx + nomeW + k * colW + colW / 2;
-          if (c === 2) s.addShape(pres.shapes.OVAL, { x: cx - 0.13, y: y + rowH / 2 - 0.16, w: 0.26, h: 0.26, fill: { color: AZUL }, line: { color: AZUL } });
-          else if (c === 1) s.addShape(pres.shapes.OVAL, { x: cx - 0.13, y: y + rowH / 2 - 0.16, w: 0.26, h: 0.26, fill: { color: 'FFFFFF' }, line: { color: AZUL, width: 2.5 } });
-          else s.addShape(pres.shapes.OVAL, { x: cx - 0.04, y: y + rowH / 2 - 0.07, w: 0.08, h: 0.08, fill: { color: LINHA }, line: { color: LINHA } });
-        });
-        s.addShape(pres.shapes.LINE, { x: mx, y: y + rowH, w: mw, h: 0, line: { color: 'E6E8EC', width: 1 } });
-      });
-      T(s, '● especialista   ○ apoio', { x: mx, y: 2.2 + D.matrix.length * rowH, w: mw, h: 0.35, color: TXT2 });
       const px = 6.55;
       s.addShape(pres.shapes.RECTANGLE, { x: px, y: 0.84, w: W - px, h: H - 0.84, fill: { color: NAVY }, line: { color: NAVY } });
       T(s, 'As 4 competências', { x: px + 0.3, y: 1.0, w: W - px - 0.5, h: 0.4, fontSize: 20, bold: true, color: 'FFFFFF' });
