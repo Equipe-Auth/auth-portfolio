@@ -128,16 +128,16 @@
       [['Missão', C.MISSAO], ['Visão', C.VISAO]].forEach(([t, txt], k) => {
         const x = 0.5 + k * 3.15;
         T(s, t, { x, y: mvY + 0.3, w: 2.95, h: 0.35, fontSize: 18, bold: true, color: CEU });
-        T(s, txt || '', { x, y: mvY + 0.7, w: 2.95, h: 2.3, color: 'D5DAE6' });
+        T(s, txt || '', { x, y: mvY + 0.75, w: 2.95, h: 2.35, fontSize: 18, color: 'D5DAE6' });
       });
       T(s, 'Valores', { x: 6.8, y: mvY + 0.3, w: 2.7, h: 0.35, fontSize: 18, bold: true, color: CEU });
-      T(s, (C.VALORES || []).map((v, i, a) => ({ text: v, options: { bullet: true, breakLine: i < a.length - 1 } })), { x: 6.8, y: mvY + 0.7, w: 2.7, h: 2.0, color: 'FFFFFF', paraSpaceAfter: 6 });
+      T(s, (C.VALORES || []).map((v, i, a) => ({ text: v, options: { bullet: true, breakLine: i < a.length - 1 } })), { x: 6.8, y: mvY + 0.75, w: 2.7, h: 2.2, fontSize: 18, color: 'FFFFFF', paraSpaceAfter: 10 });
       s.addNotes('Quem somos, missão, visão e valores.');
 
       // ---------- 2 e 3 · Integrantes (larguras proporcionais ao texto) ----------
-      const card = (s, m, k, x, w) => {
-        const y0 = 0.98, foto_w = 0.85, foto_h = 1.05;
-        s.addShape(pres.shapes.RECTANGLE, { x, y: y0, w, h: H - y0 - 0.12, fill: { color: 'FFFFFF' }, line: { color: LINHA, width: 0.75 } });
+      const card = (s, m, k, x, w, hc) => {
+        const y0 = 0.98, foto_w = 0.85, foto_h = 1.05, fim = y0 + Math.min(H - y0 - 0.12, hc || 99);
+        s.addShape(pres.shapes.RECTANGLE, { x, y: y0, w, h: fim - y0, fill: { color: 'FFFFFF' }, line: { color: LINHA, width: 0.75 } });
         s.addShape(pres.shapes.RECTANGLE, { x, y: y0, w, h: 0.07, fill: { color: hex(m.cor) }, line: { color: hex(m.cor) } });
         const ix = x + 0.2, iw = w - 0.4;
         foto(s, k, ix, y0 + 0.25, foto_w, foto_h, false);
@@ -151,10 +151,13 @@
         let y = y0 + 0.2 + Math.max(foto_h + 0.1, hh) + 0.1;
         if (m.pendente) { T(s, 'Aguardando preenchimento do formulário.', { x: ix, y, w: iw, h: 0.4, color: TXT2 }); return; }
         const l2 = (m.frase ? [m.cargo, m.empresa, m.formacao] : [m.formacao]).filter(Boolean).join(' · ');
-        if (l2) { const h = alt(l2, iw, MIN); T(s, l2, { x: ix, y, w: iw, h, color: TXT2 }); y += h + 0.06; }
-        if (m.skills.length) { const sk = m.skills.join(' · '); const h = alt(sk, iw, MIN, true); T(s, sk, { x: ix, y, w: iw, h, bold: true, color: AZUL }); y += h + 0.08; }
-        s.addShape(pres.shapes.LINE, { x: ix, y, w: iw, h: 0, line: { color: 'E6E8EC', width: 1 } });
-        T(s, m.contrib || '', { x: ix, y: y + 0.08, w: iw, h: H - 0.18 - (y + 0.08) });
+        // Formação, hard skills e contribuição numa caixa só: o PowerPoint flui o texto sem buracos nem sobreposição
+        const corpo = [
+          ...(l2 ? [{ text: l2, options: { color: TXT2, breakLine: true } }] : []),
+          ...(m.skills.length ? [{ text: m.skills.join(' · '), options: { bold: true, color: AZUL, breakLine: true, paraSpaceBefore: 4 } }] : []),
+          { text: m.contrib || '', options: { paraSpaceBefore: 10 } }
+        ];
+        T(s, corpo, { x: ix, y, w: iw, h: fim - 0.1 - y });
       };
       // Altura estimada de um card na largura w
       const altura = (m, w) => {
@@ -185,14 +188,22 @@
       const grupo = (titulo, idx, L) => {
         const s = wrap(pres.addSlide()); cabecalho(s, titulo);
         let x = 0.5;
-        idx.forEach((k, j) => { card(s, membros[k], k, x, L.ws[j]); x += L.ws[j] + GAP; });
+        // Altura do card acompanha o conteúdo mais alto do slide (sem sobrar faixa branca)
+        idx.forEach((k, j) => { card(s, membros[k], k, x, L.ws[j], L.h + 0.3); x += L.ws[j] + GAP; });
         s.addNotes('Integrantes: formação, hard skills e contribuição de cada um.');
       };
-      // Até 4 integrantes: 2 por slide. Com 5: divide em 2 + 3 (ou 3 + 2), o que couber melhor.
-      const ids = membros.map((_, i) => i), cortes = ids.length > 4 ? [2, 3] : [Math.min(2, ids.length)];
+      // Até 4 integrantes: 2 por slide, na ordem. Com 5: testa todas as divisões 2 + 3 e fica com a mais equilibrada.
+      const ids = membros.map((_, i) => i);
+      const divisoes = [];
+      if (ids.length > 4) {
+        for (let a = 0; a < ids.length; a++) for (let b = a + 1; b < ids.length; b++) {
+          const dois = [a, b], tres = ids.filter(i => i !== a && i !== b);
+          divisoes.push(dois[0] === 0 ? [dois, tres] : [tres, dois]);
+        }
+      } else divisoes.push([ids.slice(0, 2), ids.slice(2)].filter(x => x.length));
       let plano = null;
-      cortes.forEach(c => {
-        const g = [ids.slice(0, c), ids.slice(c)].filter(x => x.length), Ls = g.map(larguras), h = Math.max(...Ls.map(l => l.h));
+      divisoes.forEach(g => {
+        const Ls = g.map(larguras), hs = Ls.map(l => l.h), h = Math.max(...hs) + Math.abs(hs[0] - (hs[1] || hs[0])) * 0.15;
         if (!plano || h < plano.h) plano = { g, Ls, h };
       });
       plano.g.forEach((g, i) => grupo(`0${i + 2} · Integrantes`, g, plano.Ls[i]));
@@ -227,7 +238,7 @@
 
       // ---------- 5 · Vivência, evidência, caso e fechamento ----------
       s = wrap(pres.addSlide()); cabecalho(s, '05 · Vivência, evidência e fechamento');
-      const topY = 1.0, colH = 2.66, VW = 3.6;
+      const topY = 1.0, fy = 3.95, colH = fy - topY - 0.12, VW = 3.0;
       // Vivência
       T(s, 'Vivência multicultural', { x: 0.5, y: topY, w: VW, h: 0.35, bold: true, fontSize: 18 });
       let vy = topY + 0.42; const comTrip = new Set(D.trips.map(t => t.nome)); let restantes = 0;
@@ -243,26 +254,28 @@
       if (extra && vy + alt(extra, VW, MIN) <= topY + colH + 0.05) T(s, extra, { x: 0.5, y: vy, w: VW, h: alt(extra, VW, MIN), color: TXT2 });
       // Evidência
       const ev = D.skills.flatMap(k => k.ev.map(v => ({ ...v, k })));
-      const ex = 4.3, ew = 3.2;
+      const ex = 3.7, ew = 3.9;
       s.addShape(pres.shapes.RECTANGLE, { x: ex, y: topY, w: ew, h: colH, fill: { color: 'FFFFFF' }, line: { color: LINHA, width: 0.75 } });
       if (ev.length) {
-        const v = ev[0];
+        // Usa a primeira evidência que cabe no quadro (ou a mais curta)
+        const cabe = v => alt(v.k.label, ew - 0.4, MIN, true) + alt('“' + v.txt + '”', ew - 0.4, MIN) + alt(v.quem, ew - 0.4, MIN, true) + 0.3 <= colH;
+        const v = ev.find(cabe) || [...ev].sort((a, b) => a.txt.length - b.txt.length)[0];
         T(s, v.k.label, { x: ex + 0.2, y: topY + 0.15, w: ew - 0.4, h: alt(v.k.label, ew - 0.4, MIN), bold: true, color: hex(v.k.cor) });
-        T(s, [{ text: '“' + v.txt + '”', options: { breakLine: true } }, { text: short(v.quem), options: { bold: true } }], { x: ex + 0.2, y: topY + 0.55, w: ew - 0.4, h: colH - 0.65 });
+        const lh = alt(v.k.label, ew - 0.4, MIN, true);
+        T(s, [{ text: '“' + v.txt + '”', options: { breakLine: true } }, { text: '— ' + short(v.quem), options: { bold: true } }], { x: ex + 0.2, y: topY + 0.2 + lh, w: ew - 0.4, h: colH - 0.3 - lh });
       } else T(s, '[Evidências das competências a preencher no formulário]', { x: ex + 0.2, y: topY + 0.2, w: ew - 0.4, h: 1, color: TXT2 });
       // Caso real
-      const cx = 7.75, cw = 1.85, c = D.caso;
+      const cx = 7.8, cw = 1.8, c = D.caso;
       T(s, 'Caso real em destaque', { x: cx, y: topY, w: cw, h: 0.6, bold: true, fontSize: 18 });
       if (c) {
         const res = c.passos.find(p => p[0] === 'Resultado');
         T(s, [{ text: c.titulo, options: { bold: true, breakLine: true } }, { text: short(c.quem), options: { color: TXT2, breakLine: !!res } }, ...(res ? [{ text: res[1] }] : [])], { x: cx, y: topY + 0.65, w: cw, h: colH - 0.65 });
       } else T(s, '[Aguardando um caso real: contexto → desafio → ação → resultado]', { x: cx, y: topY + 0.65, w: cw, h: 1.3, color: 'D41F6F' });
       // Fechamento
-      const fy = 3.72;
       s.addShape(pres.shapes.RECTANGLE, { x: 0, y: fy, w: W, h: H - fy, fill: { color: NAVY }, line: { color: NAVY } });
-      T(s, [{ text: C.FRASE_FINAL || '', options: {} }, { text: '.', options: { color: LARANJA } }], { x: 0.5, y: fy + 0.18, w: 9, h: 0.45, fontSize: 22, bold: true, color: 'FFFFFF' });
-      T(s, 'A equipe AUTH informa que os integrantes a seguir colaboraram efetivamente na realização do desafio:', { x: 0.5, y: fy + 0.68, w: 9, h: 0.5, color: 'D5DAE6' });
-      T(s, C.INTEGRANTES.join(' · '), { x: 0.5, y: fy + 1.2, w: 9, h: 0.5, bold: true, color: 'FFFFFF' });
+      T(s, [{ text: C.FRASE_FINAL || '', options: {} }, { text: '.', options: { color: LARANJA } }], { x: 0.5, y: fy + 0.12, w: 9, h: 0.42, fontSize: 22, bold: true, color: 'FFFFFF' });
+      T(s, 'A equipe AUTH informa que os integrantes a seguir colaboraram efetivamente na realização do desafio:', { x: 0.5, y: fy + 0.56, w: 9, h: 0.3, color: 'D5DAE6' });
+      T(s, C.INTEGRANTES.join(' · '), { x: 0.5, y: fy + 0.92, w: 9, h: 0.62, bold: true, color: 'FFFFFF' });
       s.addNotes('Vivência multicultural, evidência de competência, caso real e declaração de participação.');
 
       await pres.writeFile({ fileName: 'Portfolio_Equipe_AUTH.pptx' });
