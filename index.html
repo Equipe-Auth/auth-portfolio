@@ -68,7 +68,7 @@
         ${membros.map(m => `
           <div class="cover-person" style="--c:${m.cor}">
             ${avatar(m)}
-            <div><b>${m.n}</b><strong>${esc(m.nome)}</strong></div>
+            <div><strong>${esc(m.nome)}</strong></div>
           </div>`).join('')}
       </div>
     </div>
@@ -105,15 +105,15 @@
       ${membros.map(m => m.pendente ? `
         <article class="card pend" style="--c:${m.cor}">
           <div class="card-body">
-            <div class="card-top"><div class="card-photo">${foto(m, 'aguardando foto')}</div><div class="card-id"><b>${m.n}</b><h3>${esc(m.nome)}</h3></div></div>
+            <div class="card-top"><div class="card-photo">${foto(m, 'aguardando foto')}</div><div class="card-id"><h3>${esc(m.nome)}</h3></div></div>
             <span class="pend-note">Aguardando preenchimento do formulário.</span>
           </div>
         </article>` : `
         <article class="card" style="--c:${m.cor}">
           <div class="card-body">
             <div class="card-top">
-              <div class="card-photo">${foto(m, 'foto ' + m.n)}</div>
-              <div class="card-id"><b>${m.n}</b><h3>${esc(m.nome)}</h3>${linha1(m)}</div>
+              <div class="card-photo">${foto(m, 'foto')}</div>
+              <div class="card-id"><h3>${esc(m.nome)}</h3>${linha1(m)}</div>
             </div>
             <span class="card-sub">${linha2(m)}</span>
             <div class="tags">${m.skills.map(s => `<span class="tag">${esc(s)}</span>`).join('')}</div>
@@ -130,7 +130,7 @@
       <span class="eyebrow">02 · Mapa de complementaridade</span>
       <h2 class="h2" style="margin-bottom:32px">Nenhuma frente descoberta</h2>
       <div class="matrix-wrap"><div class="matrix" style="--n:${membros.length}">
-        <div class="mrow head"><span>ÁREA</span>${membros.map(m => `<div class="mhead" style="--c:${m.cor}" title="${esc(m.nome)}">${avatar(m)}<b>${m.n}</b></div>`).join('')}</div>
+        <div class="mrow head"><span>ÁREA</span>${membros.map(m => `<div class="mhead" style="--c:${m.cor}" title="${esc(m.nome)}">${avatar(m)}<b>${esc(m.nome.split(' ')[0])}</b></div>`).join('')}</div>
         ${D.matrix.map(r => `
           <div class="mrow"><div><strong>${esc(r.area)}</strong><br><span class="bu">${esc(r.bu)}</span></div>${r.cells.map(c => `<div class="mcell">${dot(c)}</div>`).join('')}</div>`).join('')}
       </div></div>

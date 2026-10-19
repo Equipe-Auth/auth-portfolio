@@ -42,8 +42,18 @@
     return cv.toDataURL('image/png').replace(/^data:/, '');
   }
   // Estimativa de linhas de texto Arial (largura média ≈ 0,5 em)
-  const linhas = (txt, w, pt) => Math.max(1, Math.ceil((String(txt).length * pt * 0.5 / 72) / (w * S * 0.93)));
-  const alt = (txt, w, pt) => linhas(txt, w, pt) * pt * 1.2 / 72 / S;
+  // Estimativa de linhas com quebra por palavra (negrito é mais largo)
+  const linhas = (txt, w, pt, bold) => {
+    const cw = pt * (bold ? 0.56 : 0.5) / 72, max = w * S * 0.93;
+    let n = 1, linha = 0;
+    String(txt).split(/\s+/).filter(Boolean).forEach(p => {
+      const pw = p.length * cw, esp = linha ? cw : 0;
+      if (linha && linha + esp + pw > max) { n++; linha = pw; } else linha += esp + pw;
+      while (linha > max) { n++; linha -= max; }
+    });
+    return n;
+  };
+  const alt = (txt, w, pt, bold) => linhas(txt, w, pt, bold) * pt * 1.2 / 72 / S;
   // Slide com coordenadas em unidades do desenho, convertidas para o formato widescreen
   const esc = o => { const r = { ...o }; ['x', 'y', 'w', 'h'].forEach(k => { if (typeof r[k] === 'number') r[k] *= S; }); if (r.sizing) r.sizing = { ...r.sizing, w: r.sizing.w * S, h: r.sizing.h * S }; return r; };
   const wrap = sl => ({
@@ -106,7 +116,7 @@
         const x = 0.85 + (k % 2) * 2.85, y = (membros.length > 4 ? 2.9 : 3.05) + Math.floor(k / 2) * passo;
         s.addShape(pres.shapes.OVAL, { x: x - 0.04, y: y - 0.04, w: d + 0.08, h: d + 0.08, fill: { color: hex(m.cor) }, line: { color: hex(m.cor) } });
         foto(s, k, x, y, d, d, true);
-        T(s, [{ text: m.n, options: { bold: true, color: hex(m.cor), breakLine: true } }, { text: m.nome, options: { bold: true } }], { x: x + d + 0.15, y: y + d / 2 - 0.42, w: 2.7 - d, h: 0.85, valign: 'middle' });
+        T(s, [{ text: m.nome, options: { bold: true } }], { x: x + d + 0.15, y: y + d / 2 - 0.42, w: 2.7 - d, h: 0.85, valign: 'middle' });
       });
       s.addNotes('Capa: equipe AUTH e integrantes.');
 
@@ -133,9 +143,8 @@
         foto(s, k, ix, y0 + 0.25, foto_w, foto_h, false);
         const tx = ix + foto_w + 0.2, tw = iw - foto_w - 0.2;
         const l1 = m.frase || [m.cargo, m.empresa].filter(Boolean).join(' · ');
-        const hh = alt(m.n, tw, MIN) + alt(m.nome, tw, 18) + (l1 ? alt(l1, tw, MIN) : 0) + 0.05;
+        const hh = alt(m.nome, tw, 18, true) + (l1 ? alt(l1, tw, MIN, !m.frase) : 0) + 0.05;
         T(s, [
-          { text: m.n, options: { bold: true, color: hex(m.cor), breakLine: true } },
           { text: m.nome, options: { bold: true, fontSize: 18, breakLine: !!l1 } },
           ...(l1 ? [{ text: l1, options: { italic: !!m.frase, bold: !m.frase } }] : [])
         ], { x: tx, y: y0 + 0.2, w: tw, h: Math.max(foto_h + 0.1, hh), valign: 'bottom' });
@@ -143,17 +152,17 @@
         if (m.pendente) { T(s, 'Aguardando preenchimento do formulário.', { x: ix, y, w: iw, h: 0.4, color: TXT2 }); return; }
         const l2 = (m.frase ? [m.cargo, m.empresa, m.formacao] : [m.formacao]).filter(Boolean).join(' · ');
         if (l2) { const h = alt(l2, iw, MIN); T(s, l2, { x: ix, y, w: iw, h, color: TXT2 }); y += h + 0.06; }
-        if (m.skills.length) { const sk = m.skills.join(' · '); const h = alt(sk, iw, MIN); T(s, sk, { x: ix, y, w: iw, h, bold: true, color: AZUL }); y += h + 0.08; }
+        if (m.skills.length) { const sk = m.skills.join(' · '); const h = alt(sk, iw, MIN, true); T(s, sk, { x: ix, y, w: iw, h, bold: true, color: AZUL }); y += h + 0.08; }
         s.addShape(pres.shapes.LINE, { x: ix, y, w: iw, h: 0, line: { color: 'E6E8EC', width: 1 } });
         T(s, m.contrib || '', { x: ix, y: y + 0.08, w: iw, h: H - 0.18 - (y + 0.08) });
       };
       // Altura estimada de um card na largura w
       const altura = (m, w) => {
         const iw = w - 0.4, tw = iw - 1.05, l1 = m.frase || [m.cargo, m.empresa].filter(Boolean).join(' · ');
-        const topo = Math.max(1.25, alt(m.nome, tw, 18) + (l1 ? alt(l1, tw, MIN) : 0) + 0.45);
+        const topo = Math.max(1.25, alt(m.nome, tw, 18, true) + (l1 ? alt(l1, tw, MIN, !m.frase) : 0) + 0.45);
         if (m.pendente) return topo + 0.8;
         const l2 = (m.frase ? [m.cargo, m.empresa, m.formacao] : [m.formacao]).filter(Boolean).join(' · ');
-        return topo + (l2 ? alt(l2, iw, MIN) : 0) + (m.skills.length ? alt(m.skills.join(' · '), iw, MIN) : 0) + alt(m.contrib || '', iw, MIN) + 0.4;
+        return topo + (l2 ? alt(l2, iw, MIN) : 0) + (m.skills.length ? alt(m.skills.join(' · '), iw, MIN, true) : 0) + alt(m.contrib || '', iw, MIN) + 0.4;
       };
       // Escolhe as larguras das colunas que deixam a coluna mais alta com a menor altura
       const GAP = 0.25, MINW = 2.3;

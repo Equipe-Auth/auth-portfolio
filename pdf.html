@@ -164,12 +164,12 @@
     const l2 = (m.frase ? [m.cargo, m.empresa, m.formacao] : [m.formacao]).filter(Boolean).join(' · ');
     return m.pendente ? `
     <div class="mem" style="--c:${m.cor}">
-      <div class="pic ph">foto ${m.n}</div>
-      <div class="id"><b>${m.n}</b><div class="nm">${esc(m.nome)}</div><div class="vazio">[Aguardando preenchimento]</div></div>
+      <div class="pic ph">foto</div>
+      <div class="id"><div class="nm">${esc(m.nome)}</div><div class="vazio">[Aguardando preenchimento]</div></div>
     </div>` : `
     <div class="mem" style="--c:${m.cor}">
-      <div class="pic${m.foto ? '' : ' ph'}">${m.foto ? img(m) : 'foto ' + m.n}</div>
-      <div class="id"><b>${m.n}</b><div class="nm">${esc(m.nome)}</div>${l1}${l2 ? `<div class="meta">${esc(l2)}</div>` : ''}</div>
+      <div class="pic${m.foto ? '' : ' ph'}">${m.foto ? img(m) : 'foto'}</div>
+      <div class="id"><div class="nm">${esc(m.nome)}</div>${l1}${l2 ? `<div class="meta">${esc(l2)}</div>` : ''}</div>
       <div class="rest">
         <div class="tags">${m.skills.map(s => `<span>${esc(s)}</span>`).join('')}</div>
         <p class="txt">${esc(m.contrib)}</p>
@@ -186,7 +186,7 @@
         <h1>Portfólio da Equipe <span>AUTH</span> – Processo Seletivo Argo Menthor</h1>
         <div class="cv-bar"></div>
         <div class="cv-people">
-          ${membros.map(m => `<div class="cv-person" style="--c:${m.cor}"><span class="av">${img(m)}</span><div><b>${m.n}</b>${esc(m.nome)}</div></div>`).join('')}
+          ${membros.map(m => `<div class="cv-person" style="--c:${m.cor}"><span class="av">${img(m)}</span><div>${esc(m.nome)}</div></div>`).join('')}
         </div>
       </div>
     </section>`;
@@ -210,7 +210,7 @@
     ${membros.slice(4).map(mem).join('')}
     <h2 style="margin-top:5mm">Mapa de complementaridade</h2>
     <div class="mx" style="--n:${membros.length}">
-      <span class="h">Área</span>${membros.map(m => `<span class="h c" style="--c:${m.cor}"><span class="av">${img(m)}</span>${m.n}</span>`).join('')}
+      <span class="h">Área</span>${membros.map(m => `<span class="h c" style="--c:${m.cor}"><span class="av" title="${esc(m.nome)}">${img(m)}</span></span>`).join('')}
       ${D.matrix.map(r => `<span><span><strong>${esc(r.area)}</strong> <span style="color:var(--m)">· ${esc(r.bu)}</span></span></span>${r.cells.map(c => `<span class="c"><span class="d${c}"></span></span>`).join('')}`).join('')}
     </div>
     <div style="margin-top:1.5mm;color:var(--m)">● especialista   ◐ apoio   · sem atuação</div>
