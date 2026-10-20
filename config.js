@@ -44,11 +44,16 @@ window.AUTH_CONFIG = {
     { id: 'col', area: 'Colaboração & liderança', bu: 'Resiliência e trabalho em equipe' }
   ],
 
+  // REDE (mapa de complementaridade): papel = rótulo da pílula; rede = frase curta embaixo do nome.
+  REDE_TITULO: 'Cinco perfis, uma rede',
+  REDE_TEXTO: 'Ninguém cobre tudo sozinho: cada integrante da AUTH traz uma força diferente e todos se conectam com todos.',
+
   // Perfis do design v2 (deck da equipe). Completam quem ainda não respondeu o formulário;
   // o que vier pelo formulário tem prioridade. areas: 0 = sem atuação, 1 = apoio, 2 = especialista.
   // soft: ids das 4 competências (com, res, pla, sto) que o integrante declara.
   PERFIS: {
     'Gabriel Martins Seabra': {
+      papel: 'Engenharia & Liderança', rede: 'Lidera a execução e prova o resultado.',
       formacao: 'Engenheiro Mecânico - UFPR',
       resumo: 'Engenheiro mecânico de serviços industriais: traz a visão de chão de fábrica, a gestão de não conformidades e o uso de dados para manter a operação confiável e rastreável.',
       hard: ['Engenharia de produto', 'Gestão de NCRs', 'Gestão de dados'],
@@ -57,6 +62,7 @@ window.AUTH_CONFIG = {
       foto: 'assets/fotos/gabriel.jpg', pos: '50% 20%'
     },
     'Giovanna Ismael Alves de Souza': {
+      papel: 'Negócio & Tecnologia', rede: 'Conecta negócio e tecnologia.',
       frase: 'Tecnologia conectada ao negócio',
       formacao: 'Sistemas de Informação · MBA Executivo em Gestão (Gerenciamento de Projetos)',
       resumo: 'Graduada em Sistemas de Informação, tem mais de 10 anos de experiência em tecnologia, processos de negócio, ERPs e transformação digital. Atua entre stakeholders e equipes técnicas para viabilizar integrações e soluções que gerem valor.',
@@ -66,6 +72,7 @@ window.AUTH_CONFIG = {
       foto: 'assets/fotos/giovanna.jpg', pos: '50% 15%'
     },
     'Igor Farina': {
+      papel: 'Integração & Gestão de Projetos', rede: 'Projeta e integra.',
       frase: 'Engenharia que conecta estratégia, inovação e resultado',
       cargo: 'Projetista Master',
       formacao: 'Engenharia Civil · Especialização em Estruturas de Concreto e Fundações',
@@ -76,6 +83,7 @@ window.AUTH_CONFIG = {
       foto: 'assets/fotos/igor.jpg', pos: '50% 20%'
     },
     'Jorge Alberto Portiglioti': {
+      papel: 'Finanças & Agronegócio', rede: 'Sustenta as finanças do agronegócio.',
       frase: 'Gestão inteligente para resultados sustentáveis',
       formacao: 'Ciências Contábeis · Pós-graduação em Agronegócio',
       resumo: 'Carreira consolidada nas áreas administrativa e financeira do agronegócio, com experiência em operações ligadas ao produtor rural. Formado em Ciências Contábeis e pós-graduado em Agronegócio, transforma dados em informação para apoiar decisões e resultados.',
@@ -93,6 +101,9 @@ window.AUTH_CONFIG = {
         resultado: 'Auditoria aprovada e bonificação por tonelada de cana produzida: o compromisso ambiental virou receita adicional.',
         soft: 'pla'
       }
+    },
+    'Lucas Nelson Atallah': {
+      papel: 'Estratégia & Posicionamento', rede: 'Define valor, preço e capital.'
     }
   }
 };

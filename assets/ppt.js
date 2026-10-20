@@ -212,16 +212,25 @@
       // ---------- 4 · Complementaridade + 4 competências ----------
       s = wrap(pres.addSlide()); cabecalho(s, '04 · Mapa de complementaridade');
       const mx = 0.5, mw = 5.75;
-      T(s, 'Nenhuma frente descoberta', { x: mx, y: 1.0, w: mw, h: 0.45, fontSize: 22, bold: true });
-      T(s, 'Escala: 2 especialista · 1 apoio · 0 sem atuação', { x: mx, y: 1.42, w: mw, h: 0.3, color: TXT2 });
-      // Roda de competências: radar nativo do PowerPoint (editável), uma série por integrante
-      s.addChart(pres.charts.RADAR, membros.map((m, j) => ({ name: short(m.nome), labels: D.matrix.map(r => r.area), values: D.matrix.map(r => Number(r.cells[j]) || 0) })), {
-        x: 0.3, y: 1.85, w: 6.1, h: 3.73, radarStyle: 'marker', layout: { x: 0.02, y: 0.13, w: 0.96, h: 0.66 }, chartColors: membros.map(m => hex(m.cor)),
-        lineSize: 2, lineDataSymbol: 'circle', lineDataSymbolSize: 6,
-        valAxisMinVal: 0, valAxisMaxVal: 2, valAxisMajorUnit: 0.5, valAxisHidden: true, valGridLine: { color: 'DCDFE6', size: 1 },
-        catAxisLabelFontSize: MIN, catAxisLabelFontFace: F, catAxisLabelColor: NAVY,
-        showLegend: true, legendPos: 'b', legendFontSize: MIN, legendFontFace: F, legendColor: NAVY
-      });
+      T(s, C.REDE_TITULO || 'Nenhuma frente descoberta', { x: mx, y: 0.98, w: mw, h: 0.42, fontSize: 22, bold: true });
+      if (C.REDE_TEXTO) T(s, C.REDE_TEXTO, { x: mx, y: 1.4, w: mw + 0.2, h: 0.56, color: TXT2 });
+      // Rede de complementaridade com formas nativas: pílula (papel) + nome, todos ligados entre si
+      {
+        const n = membros.length, cxr = 3.35, cyr = 3.8, rx = 2.2, ry = 1.3, pw = 1.8, ph = 0.54;
+        const curto = nome => { const w = String(nome).split(' '); return w.length > 2 ? w[0] + ' ' + w[w.length - 1] : nome; };
+        const nos = membros.map((m, i) => { const a = (-90 + i * 360 / n) * Math.PI / 180; return { m, x: cxr + Math.cos(a) * rx, y: cyr + Math.sin(a) * ry, topo: i === 0 }; });
+        s.addShape(pres.shapes.OVAL, { x: cxr - ry * 1.28, y: cyr - ry * 1.28, w: ry * 2.56, h: ry * 2.56, fill: { color: 'FFFFFF', transparency: 100 }, line: { color: '9AB3AC', width: 2, dashType: 'sysDot' } });
+        s.addShape(pres.shapes.OVAL, { x: cxr - ry * 1.18, y: cyr - ry * 1.18, w: ry * 2.36, h: ry * 2.36, fill: { color: 'E3F1EC' }, line: { color: 'E3F1EC' } });
+        const linha = (a, b) => s.addShape(pres.shapes.LINE, { x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x) || 0.001, h: Math.abs(b.y - a.y) || 0.001, flipH: (b.x < a.x) !== (b.y < a.y), line: { color: '5DB3A1', width: 1.5 } });
+        for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) linha(nos[i], nos[j]);
+        s.addShape(pres.shapes.OVAL, { x: cxr - 0.5, y: cyr - 0.5, w: 1.0, h: 1.0, fill: { color: 'FFFFFF' }, line: { color: 'FFFFFF' } });
+        if (logo) s.addImage({ data: logo.data, x: cxr - 0.36, y: cyr - 0.36 * logo.h / logo.w, w: 0.72, h: 0.72 * logo.h / logo.w, altText: 'AUTH' });
+        nos.forEach(({ m, x, y, topo }) => {
+          const papel = m.papel || m.nome, txt = papel.includes(' & ') ? papel.split(' & ')[0] + ' &' + String.fromCharCode(10) + papel.split(' & ').slice(1).join(' & ') : papel;
+          T(s, txt, { shape: pres.shapes.ROUNDED_RECTANGLE, rectRadius: 0.12, x: x - pw / 2, y: y - ph / 2, w: pw, h: ph, fill: { color: hex(m.cor) }, color: 'FFFFFF', bold: true, align: 'center', valign: 'middle', lineSpacingMultiple: 0.9 });
+          T(s, curto(m.nome), { x: x - 1.2, y: topo ? y - ph / 2 - 0.3 : y + ph / 2 + 0.03, w: 2.4, h: 0.27, bold: true, align: 'center', valign: topo ? 'bottom' : 'top' });
+        });
+      }
       const px = 6.55;
       s.addShape(pres.shapes.RECTANGLE, { x: px, y: 0.84, w: W - px, h: H - 0.84, fill: { color: NAVY }, line: { color: NAVY } });
       T(s, 'As 4 competências', { x: px + 0.3, y: 1.0, w: W - px - 0.5, h: 0.4, fontSize: 20, bold: true, color: 'FFFFFF' });

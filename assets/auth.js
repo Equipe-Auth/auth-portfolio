@@ -53,7 +53,7 @@
     // Áreas do formulário só valem se marcarem alguma das áreas atuais do mapa
     const formAreas = C.AREAS.some(a => Number((m.areas || {})[a.id]) > 0);
     return Object.assign(m, {
-      frase: p.frase || '',
+      frase: p.frase || '', papel: p.papel || '', rede: p.rede || '',
       cargo: m.cargo || p.cargo || '',
       formacao: m.formacao || p.formacao || '',
       skills: m.skills.length ? m.skills : (p.hard || []),
@@ -189,5 +189,58 @@
       ${o.centro === false ? '' : `<circle cx="0" cy="0" r="18" fill="#EEF0F4"/><text x="0" y="${f * 0.25}" text-anchor="middle" font-size="${f * 0.62}" font-weight="700" fill="#5A6070">AUTH</text>`}${rotulos}</svg>`;
   }
 
-  window.AUTH = { C, SOFT, LIMITS, esc, num, fotoUrl, softById, logo, isDemo, loadTeam, submit, resizeImage, derive, radar, AREA_CORES };
+  // Rede de complementaridade: um nó por integrante (pílula com o papel, nome e frase), todos ligados entre si.
+  // o.font: tamanho do texto (unidades do desenho); o.raio / o.largo: raio vertical e fator horizontal;
+  // o.compacto: pílulas e frases em até 2 linhas e nome abreviado (para a página A4); o.logo: caminho do logo.
+  function rede(membros, o = {}) {
+    const f = o.font || 20, n = membros.length, R = o.raio || 300, RX = R * (o.largo || 1.12), cw = f * 0.56, lh = f * 1.2;
+    const curto = nome => { const w = String(nome).split(' '); return w.length > 2 ? w[0] + ' ' + w[w.length - 1] : nome; };
+    const quebra = (t, max) => { // até 2 linhas, quebrando por palavra
+      const ws = String(t).split(' '); let l1 = '';
+      while (ws.length && (l1 + ' ' + ws[0]).trim().length <= max) l1 = (l1 + ' ' + ws.shift()).trim();
+      return ws.length ? [l1, ws.join(' ')] : [l1];
+    };
+    const ang = i => (-90 + i * 360 / n) * Math.PI / 180;
+    const fx = v => v.toFixed(1), larg = (t, k = 1) => String(t).length * cw * k;
+    const nos = membros.map((m, i) => {
+      const papel = m.papel || m.nome;
+      const pl = o.compacto && papel.includes(' & ') ? [papel.split(' & ')[0] + ' &', papel.split(' & ').slice(1).join(' & ')] : [papel];
+      const fr = m.rede ? (o.compacto ? quebra(m.rede, 22) : [m.rede]) : [];
+      const nome = o.compacto ? curto(m.nome) : m.nome;
+      const pw = Math.max(...pl.map(l => larg(l, 1.05))) + f * 2.2, ph = f * 0.9 + pl.length * lh;
+      const tw = Math.max(larg(nome, 1.08), ...fr.map(l => larg(l, 0.92)));
+      return { m, pl, fr, nome, pw, ph, tw, x: Math.cos(ang(i)) * RX, y: Math.sin(ang(i)) * R, topo: i === 0 && n > 2 };
+    });
+    // Limites do desenho para o viewBox
+    let x0 = -R * 1.34, x1 = R * 1.34, y0 = -R * 1.34, y1 = R * 1.34;
+    nos.forEach(no => {
+      const meia = Math.max(no.pw, no.tw) / 2, txt = f * 1.3 + no.fr.length * lh + f * 0.3;
+      x0 = Math.min(x0, no.x - meia - 10); x1 = Math.max(x1, no.x + meia + 10);
+      if (no.topo) y0 = Math.min(y0, no.y - no.ph / 2 - txt - 6); else y1 = Math.max(y1, no.y + no.ph / 2 + txt + 6);
+    });
+    const linhas = [];
+    for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) linhas.push(`<line x1="${fx(nos[a].x)}" y1="${fx(nos[a].y)}" x2="${fx(nos[b].x)}" y2="${fx(nos[b].y)}"/>`);
+    const halo = ` stroke="#fff" stroke-width="${fx(f * 0.32)}" stroke-linejoin="round" paint-order="stroke"`;
+    const blocos = nos.map(no => {
+      const { m, x, y, pw, ph, pl, fr, nome, topo } = no;
+      const ty = y - (pl.length - 1) * lh / 2 + f * 0.36;
+      const pilula = `<rect x="${fx(x - pw / 2)}" y="${fx(y - ph / 2)}" width="${fx(pw)}" height="${fx(ph)}" rx="${fx(Math.min(ph / 2, f * 1.05))}" fill="${m.cor}"/>` +
+        pl.map((l, k) => `<text x="${fx(x)}" y="${fx(ty + k * lh)}" text-anchor="middle" font-size="${f}" font-weight="700" fill="#fff">${esc(l)}</text>`).join('');
+      const ny = topo ? y - ph / 2 - f * 0.45 - fr.length * lh : y + ph / 2 + f * 1.25;
+      const txt = `<text x="${fx(x)}" y="${fx(ny)}" text-anchor="middle" font-size="${f * 1.08}" font-weight="700" fill="#121C3A"${halo}>${esc(nome)}</text>` +
+        fr.map((l, k) => `<text x="${fx(x)}" y="${fx(ny + (k + 1) * lh)}" text-anchor="middle" font-size="${f * 0.92}" fill="#5A6070"${halo}>${esc(l)}</text>`).join('');
+      return `<g>${pilula}${txt}</g>`;
+    }).join('');
+    const W = x1 - x0, H = y1 - y0, rl = R * 0.4;
+    const svg = `<svg viewBox="${fx(x0)} ${fx(y0)} ${fx(W)} ${fx(H)}" role="img" aria-label="Rede de complementaridade: ${esc(membros.map(m => m.nome + ' (' + (m.papel || '') + ')').join(', '))}, todos conectados" font-family="Arial, Helvetica, sans-serif" style="display:block;width:100%;height:auto">
+      <circle cx="0" cy="0" r="${R * 1.2}" fill="#E3F1EC"/><circle cx="0" cy="0" r="${R * 1.3}" fill="none" stroke="#9AB3AC" stroke-width="4" stroke-dasharray="0 16" stroke-linecap="round"/>
+      <g stroke="#5DB3A1" stroke-width="3">${linhas.join('')}</g>
+      <circle cx="0" cy="0" r="${rl}" fill="#fff"/>${blocos}</svg>`;
+    // Logo como <img> por cima do centro (renderiza também na captura do PDF)
+    const pct = (v, a0, t) => ((v - a0) / t * 100).toFixed(2) + '%';
+    const logoImg = o.logo === false ? '' : `<img src="${o.logo || 'assets/logo-auth.png'}" alt="AUTH" style="position:absolute;left:${pct(0, x0, W)};top:${pct(0, y0, H)};width:${(rl * 1.45 / W * 100).toFixed(2)}%;transform:translate(-50%,-50%)">`;
+    return `<div class="rede" style="position:relative">${svg}${logoImg}</div>`;
+  }
+
+  window.AUTH = { C, SOFT, LIMITS, esc, num, fotoUrl, softById, logo, isDemo, loadTeam, submit, resizeImage, derive, radar, rede, AREA_CORES };
 })();
