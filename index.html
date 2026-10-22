@@ -30,14 +30,17 @@
     : `<div class="ph" style="width:100%;height:100%">${esc(label)}</div>`;
   const avatar = m => `<span class="avatar">${m.foto ? `<img src="${esc(m.foto)}" alt="" style="object-position:${esc(m.pos || '50% 20%')}">` : ''}</span>`;
 
-  // Barra de status (some na impressão; não faz parte do portfólio)
+  // Barra de status (some na impressão; não faz parte do portfólio).
+  // Só aparece quando há pendência: formulário faltando, competência sem evidência, sem caso real ou erro.
   const pend = membros.filter(m => m.fonte !== 'form').map(m => first(m.nome));
   const semEv = D.skills.filter(k => !k.ev.length).map(k => k.label);
+  const pendente = pend.length || semEv.length || !D.caso || error;
   const status = demo
     ? `<div class="status demo"><strong>Modo demonstração</strong><span>Dados de exemplo. Configure <code>API_URL</code> em config.js para ler a planilha.</span><a href="formulario.html">Formulário →</a></div>`
+    : !pendente ? ''
     : `<div class="status">
         <span class="pill">${S.preenchidos}/${membros.length} perfis no portfólio</span>
-        ${pend.length ? `<span>Formulário pendente: ${esc(pend.join(', '))}</span>` : '<span>Todos preencheram o formulário ✓</span>'}
+        ${pend.length ? `<span>Formulário pendente: ${esc(pend.join(', '))}</span>` : ''}
         ${semEv.length ? `<span class="warn">Sem evidência: ${esc(semEv.join(' · '))}</span>` : ''}
         ${D.caso ? '' : '<span class="warn">Nenhum caso real ainda</span>'}
         ${error ? `<span class="warn">Erro ao ler a planilha: ${esc(error)}</span>` : ''}
